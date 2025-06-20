@@ -18,28 +18,42 @@ object TrafficStreamProcessor {
     val logger = LoggerHelper.getLogger("TrafficStreamProcessor")
 
     val trafficSchema: StructType = new StructType()
-        .add("results", ArrayType(new StructType()
-            .add("datetime", StringType)
-            .add("predefinedlocationreference", StringType)
-            .add("averagevehiclespeed", IntegerType)
-            .add("traveltime", IntegerType)
-            .add("traveltimereliability", IntegerType)
-            .add("trafficstatus", StringType)
-            .add("vehicleprobemeasurement", IntegerType)
-            .add("geo_point_2d", new StructType()
-                .add("lat", DoubleType)
-                .add("lon", DoubleType)
-            )
-            .add("geo_shape", new StructType()
-                .add("geometry", new StructType()
-                    .add("coordinates", ArrayType(ArrayType(DoubleType)))
-                    .add("type", StringType)
-                )
-            )
-            .add("denomination", StringType)
-            .add("vitesse_maxi", IntegerType)
-            .add("hierarchie", StringType)
-        ))
+      .add("results", ArrayType(new StructType()
+        .add("datetime", StringType)
+        .add("predefinedlocationreference", StringType)
+        .add("averagevehiclespeed", IntegerType)
+        .add("traveltime", IntegerType)
+        .add("traveltimereliability", IntegerType)
+        .add("trafficstatus", StringType)
+        .add("vehicleprobemeasurement", IntegerType)
+        .add("geo_point_2d", new StructType()
+          .add("lat", DoubleType)
+          .add("lon", DoubleType)
+        )
+        .add("geo_shape", new StructType()
+          .add("geometry", new StructType()
+            .add("coordinates", ArrayType(ArrayType(DoubleType)))
+            .add("type", StringType)
+          )
+        )
+        .add("denomination", StringType)
+        .add("vitesse_maxi", IntegerType)
+        .add("hierarchie", StringType)
+      ))
+
+    // Helper function to reduce code duplication
+    private def processBatch(batchDF: DataFrame, batchId: Long, batchType: String): Unit = {
+        val count = batchDF.count()
+        logger.info(s"[${batchType.toUpperCase}] Batch $batchId - $count lignes")
+
+        if (count == 0) {
+            logger.warn(s"[${batchType.toUpperCase}] Batch $batchId vide - rien à insérer.")
+        } else {
+            logger.info(s"[${batchType.toUpperCase}] Échantillon du batch $batchId :")
+            batchDF.show(5, truncate = false)
+            batchDF.printSchema()
+        }
+    }
 
     def start(): Unit = {
         logger.info("[OK] Démarrage du streaming...")
@@ -52,12 +66,16 @@ object TrafficStreamProcessor {
         }
 
         val rawStream: DataFrame = spark.readStream
-            .schema(trafficSchema)
-            .option("maxFilesPerTrigger", 1)
-            .option("multiLine", value = true)
-            .json(AppConfig.Local.rawDir)
+          .schema(trafficSchema)
+          .option("maxFilesPerTrigger", 1)
+          .option("multiLine", value = true)
+          .json(AppConfig.Local.rawDir)
 
+        // TODO: Implement TrafficTransformer or replace with actual transformation logic
         val transformed = TrafficTransformer.transform(rawStream)
+
+        val watermarkedDF = transformed
+          .withWatermark("datetime", "10 minutes")
 
         val triggerInterval = AppConfig.Streaming.triggerInterval
         val checkpointPath = AppConfig.Streaming.checkpointDir
@@ -65,86 +83,77 @@ object TrafficStreamProcessor {
         val enableMinuteAggregation = AppConfig.Streaming.enableMinuteAggregation
         val enableHourlyAggregation = AppConfig.Streaming.enableHourlyAggregation
 
-        val mapsQuery = transformed.writeStream
-            .foreachBatch{ (batchDF: DataFrame, batchId: Long) =>
-                val count = batchDF.count()
-                logger.info(s"⚙️  Batch $batchId - $count lignes")
+        val mapsQuery = watermarkedDF.writeStream
+          .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
+              processBatch(batchDF, batchId, "maps")
 
-                if (count == 0) {
-                    logger.warn(s"/!\\  Batch $batchId vide - rien à insérer.")
-                } else {
-                    logger.info(s"=> Échantillon du batch $batchId :")
-                    batchDF.show(5, truncate = false)
-                    batchDF.printSchema()
+              if (batchDF.count() > 0) {
+                  try {
+                      val trafficMapDF = TrafficFeatsSelector.selectMapsFeatures(batchDF)
+                      PostgresLoader.load(trafficMapDF, "road_traffic_feats_map")
+                      logger.info(s"[MAPS] Batch $batchId traité avec succès")
+                  } catch {
+                      case e: Exception =>
+                          logger.error(s"[MAPS] Erreur lors du traitement du batch $batchId : $e")
+                  }
+              }
+          }
+          .outputMode("update")
+          .trigger(Trigger.ProcessingTime(triggerInterval))
+          .option("checkpointLocation", s"${checkpointPath}_maps")
+          .start()
 
-                    try {
-                        // Chargement dans la table de Maps
-                        val trafficMapDF = TrafficFeatsSelector.selectMapsFeatures(batchDF)
-                        PostgresLoader.load(trafficMapDF, "road_traffic_feats_map")
-                    } catch {
-                        case e: Exception =>
-                            logger.error(s"/!\\ Erreur lors du traitement du batch $batchId : ${e.getMessage}")
-                    }
-                }
+        val statsQuery = watermarkedDF.writeStream
+          .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
+              processBatch(batchDF, batchId, "stats")
 
-            }
-            .outputMode("update")
-            .trigger(Trigger.ProcessingTime(triggerInterval))
-            .start()
+              if (batchDF.count() > 0) {
+                  try {
+                      // Vitesse moyenne par trafficstatus
+                      val avgSpeedByMaxSpeedAndStatus = TrafficStatsAggregator.avgSpeedByMaxSpeedAndStatus(batchDF)
+                      println("############################################################")
+                      avgSpeedByMaxSpeedAndStatus.show()
+                      println("############################################################")
 
-        val statsQuery = transformed.writeStream
-            .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
-                val count = batchDF.count()
-                logger.info(s"[INFO]  Batch $batchId - $count lignes")
+                      PostgresLoader.load(avgSpeedByMaxSpeedAndStatus, "avg_speed_by_max_speed_and_status")
 
-                if (count == 0) {
-                    logger.warn(s"/!\\  Batch $batchId vide - rien à insérer.")
-                } else {
-                    logger.info(s"=> Échantillon du batch $batchId :")
-                    batchDF.show(5, truncate = false)
-                    batchDF.printSchema()
+                      // Aggrégation par minute
+                      if (enableMinuteAggregation) {
+                          val aggMinute = TrafficStatsAggregator.aggregateByPeriodAndRoadName(batchDF, "minute")
+                          PostgresLoader.load(aggMinute, "road_traffic_stats_minute")
+                      }
 
-                    try {
+                      // Agrégation par heure
+                      if (enableHourlyAggregation) {
+                          val aggHour = TrafficStatsAggregator.aggregateByPeriodAndRoadName(batchDF, "hour")
+                          PostgresLoader.load(aggHour, "road_traffic_stats_hour")
+                      }
 
-                        // Vtesse moyenne par trafficstatus
-                        val avgSpeedByStatus = TrafficStatsAggregator.avgSpeedByStatus(batchDF)
-                        PostgresLoader.load(avgSpeedByStatus, "traffic_status_avg_speed")
+                      // Sliding window
+                      if (enableSlidingWindow) {
+                          val sliding = TrafficStatsAggregator.aggregateBySlidingWindow(batchDF)
+                          PostgresLoader.load(sliding, "road_traffic_stats_sliding_window")
+                      }
 
-                        // Agrégation par minute
-                        if (enableMinuteAggregation) {
-                            val aggMinute = TrafficStatsAggregator.aggregateByPeriodAndRoadName(batchDF, "minute")
-                            PostgresLoader.load(aggMinute, "road_traffic_stats_minute")
-                        }
+                      logger.info(s"[STATS] Batch $batchId traité avec succès")
+                  } catch {
+                      case e: Exception =>
+                          logger.error(s"[MAPS] Erreur lors du traitement du batch $batchId : $e")
+                  }
+              }
+          }
+          .outputMode("update")
+          .trigger(Trigger.ProcessingTime(triggerInterval))
+          .option("checkpointLocation", s"${checkpointPath}_stats")
+          .start()
 
-                        // Agrégation par heure
-                        if (enableHourlyAggregation) {
-                            val aggHour = TrafficStatsAggregator.aggregateByPeriodAndRoadName(batchDF, "hour")
-                            PostgresLoader.load(aggHour, "road_traffic_stats_hour")
-                        }
-
-                        // Sliding window: TODO: To fix
-                        if (enableSlidingWindow) {
-                            val sliding = TrafficStatsAggregator.aggregateBySlidingWindow(batchDF)
-                            PostgresLoader.load(sliding, "road_traffic_stats_sliding_window")
-                        }
-
-                    } catch {
-                        case e: Exception =>
-                            logger.error(s"/!\\ Erreur lors du traitement du batch $batchId : ${e.getMessage}")
-                    }
-                }
-            }
-            .outputMode("update")
-            .trigger(Trigger.ProcessingTime(triggerInterval))
-            .option("checkpointLocation", checkpointPath)
-            .start()
-
-        mapsQuery.awaitTermination()
-        statsQuery.awaitTermination()
+        // Wait for any stream to terminate
+        spark.streams.awaitAnyTermination()
     }
 
     def stop(): Unit = {
         logger.info("[STOP] Arrêt du streaming...")
+        spark.streams.active.foreach(_.stop())
         spark.stop()
     }
 }

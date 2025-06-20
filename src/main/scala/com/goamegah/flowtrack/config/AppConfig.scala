@@ -6,7 +6,7 @@ import scala.concurrent.duration.Duration
 
 object AppConfig {
   private val config: Config = ConfigFactory
-    .parseResources("local.conf") // surcharge locale (si présente)
+    .parseResources("local.conf") // (src/main/resources/application.conf) surcharge locale (si présente)
     .withFallback(ConfigFactory.load()) // application.conf
 
   object API {

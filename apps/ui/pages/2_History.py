@@ -84,9 +84,9 @@ c1, c2, c3, c4 = st.columns(4)
 c1.metric("🚀 Vitesse moyenne",    f"{kpi_speed:.2f} km/h")
 c2.metric("⏱️ Temps moyen trajet", f"{kpi_travel_time:.2f} min")
 c3.metric("📈 Vitesse max",       f"{max_speed:.2f} km/h",
-         delta=f"{(max_speed - kpi_speed):+.2f}")
+          delta=f"{(max_speed - kpi_speed):+.2f}")
 c4.metric("📉 Vitesse min",       f"{min_speed:.2f} km/h",
-         delta=f"{(min_speed - kpi_speed):+.2f}")
+          delta=f"{(min_speed - kpi_speed):+.2f}")
 
 st.markdown("## 📊 Évolution temporelle")
 col_s, col_t = st.columns(2)

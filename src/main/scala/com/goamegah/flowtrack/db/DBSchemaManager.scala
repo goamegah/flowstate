@@ -45,7 +45,7 @@ object DBSchemaManager {
 
     def init(): Unit = {
         logger.info("[...] Initialisation du schéma PostgreSQL")
-
+        // Implicitly make accessible the variable for other function without explicitly passing the values
         implicit val conn: Connection = getConnection()
 
         try {
@@ -53,7 +53,7 @@ object DBSchemaManager {
             executeSqlFile("database/ddl/tables/create_road_traffic_stats_minute.sql")
             executeSqlFile("database/ddl/tables/create_road_traffic_stats_hour.sql")
             executeSqlFile("database/ddl/tables/create_road_traffic_stats_sliding_window.sql")
-
+            executeSqlFile("database/ddl/tables/create_avg_speed_by_max_speed_and_status.sql")
             // Exécution des vues
             val viewDir = new File("database/ddl/views/")
             if (viewDir.exists && viewDir.isDirectory) {
