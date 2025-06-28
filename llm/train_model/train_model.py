@@ -9,7 +9,7 @@ from llm.predict_model.predict_model import SpeedPredictor
 
 
 # load and treat the data
-def load_and_preprocess(filepath):
+def load_and_preprocess(filepath, forecast_horizon_minutes):
     # load the data
     data_frame = pd.read_csv(filepath, sep=',', encoding='utf-8')
     print("Columns found in the file:", data_frame.columns.tolist())
@@ -35,11 +35,22 @@ def load_and_preprocess(filepath):
         }
         return pd.Series(features)
 
-    # apply the treatment to  traffic_status_list
     traffic_features = data_frame['traffic_status_list'].apply(process_traffic_status)
-    traffic_features.columns = ['freeFlow_ratio', 'heavy_ratio', 'congested_ratio', 'unknown_ratio', 'status_count']
     data_frame = pd.concat([data_frame, traffic_features], axis=1)
 
+    data_frame = data_frame.sort_values(['num_troncon', 'period'])
+
+    step_minutes = 5
+
+    if forecast_horizon_minutes % step_minutes != 0:
+        raise ValueError(f"forecast_horizon_minutes doit être un multiple de {step_minutes}")
+
+    shift_steps = forecast_horizon_minutes // step_minutes
+
+    data_frame['average_speed_future'] = data_frame.groupby('num_troncon')['average_speed'].shift(-shift_steps)
+    data_frame['forecast_horizon_minutes'] = forecast_horizon_minutes
+
+    data_frame = data_frame.dropna(subset=['average_speed_future'])
     return data_frame
 
 
@@ -50,10 +61,11 @@ def train_model(data_frame):
         'num_troncon', 'total_vehicle_probe', 'average_travel_time',
         'average_travel_time_reliability', 'max_speed', 'hour',
         'day_of_week', 'is_weekend', 'freeFlow_ratio', 'heavy_ratio',
-        'congested_ratio', 'unknown_ratio', 'status_count'
+        'congested_ratio', 'unknown_ratio', 'status_count',
+        'forecast_horizon_minutes'
     ]
 
-    target = 'average_speed'
+    target = 'average_speed_future'
 
     # data separation
     X = data_frame[features]
@@ -94,16 +106,18 @@ def save_model(my_model, filename):
 if __name__ == "__main__":
     data_path = "../data/data.csv"
     print("Loading and Preprocessing Data...")
-    df = load_and_preprocess(data_path)
+    forecast_horizon_minutes = 30
+    df = load_and_preprocess(data_path, forecast_horizon_minutes)
     print("Preprocessing Complete")
     print("Train Model...")
     model = train_model(df)
     print("Model Successfully Trained")
     print("Saving Model...")
-    save_model(model, "speed_prediction_model.joblib")
+    save_model(model, f"speed_prediction_model_{forecast_horizon_minutes}min.joblib")
     print("Saving Model Complete")
 
-    predictor = SpeedPredictor("../saved_model/speed_prediction_model.joblib")
+    predictor = SpeedPredictor(f"../saved_model/speed_prediction_model_{forecast_horizon_minutes}min.joblib")
+
 
     example_input = {
         'num_troncon': 2,
@@ -111,7 +125,8 @@ if __name__ == "__main__":
         'average_travel_time': 15,
         'average_travel_time_reliability': 70,
         'max_speed': 90,
-        'traffic_status_list': "{freeFlow,heavy,freeFlow}"
+        'traffic_status_list': "{freeFlow,heavy,freeFlow}",
+        'forecast_horizon_minutes': forecast_horizon_minutes
     }
 
     predicted_speed = predictor.predict(example_input)

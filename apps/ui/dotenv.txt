@@ -1,5 +1,0 @@
-POSTGRES_HOST="localhost"
-POSTGRES_PORT="5432"
-POSTGRES_DB="dwh_postgres_db"
-POSTGRES_USER="dwh_postgres_user"
-POSTGRES_PASSWORD="dwh_postgres_password"

@@ -16,12 +16,16 @@ class SpeedPredictor:
         if not isinstance(input_data, pd.DataFrame):
             input_data = pd.DataFrame([input_data])
 
+        if 'forecast_horizon_minutes' not in input_data:
+            input_data['forecast_horizon_minutes'] = 0
+
         # ensure that all features are present
         required_features = [
             'num_troncon', 'total_vehicle_probe', 'average_travel_time',
             'average_travel_time_reliability', 'max_speed', 'hour',
             'day_of_week', 'is_weekend', 'freeFlow_ratio', 'heavy_ratio',
-            'congested_ratio', 'unknown_ratio', 'status_count'
+            'congested_ratio', 'unknown_ratio', 'status_count',
+            'forecast_horizon_minutes'
         ]
 
         # add current time if not provided

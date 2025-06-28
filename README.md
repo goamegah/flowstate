@@ -69,7 +69,7 @@ This project delivers a comprehensive real-time road traffic monitoring solution
    You can follow the `dotenv.txt` file as a template.
 
     ```bash
-    cp dotenv.txt .env
+    cp .env .env
     ```
    
 5. **Run Docker Containers**  
