@@ -25,3 +25,9 @@ Compile / run / fork := true
 
 Compile / run / javaOptions += "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED"
 
+enablePlugins(AssemblyPlugin)
+
+assembly / assemblyMergeStrategy := {
+  case PathList("META-INF", _ @ _*) => MergeStrategy.discard
+  case _                            => MergeStrategy.first
+}
