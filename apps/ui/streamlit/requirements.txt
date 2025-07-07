@@ -1,0 +1,8 @@
+streamlit
+streamlit-folium
+sqlalchemy
+psycopg2-binary
+altair
+pandas
+streamlit-autorefresh
+python-dotenv

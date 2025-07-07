@@ -1,0 +1,155 @@
+2025.04.26 10:51:44 INFO  Started: Metals version 1.5.2 in folders '/home/csalhab/Desktop/flowtrack' for client Visual Studio Code 1.99.3.[0m
+2025.04.26 10:51:45 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 10:51:51 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+Apr 26, 2025 10:51:51 AM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 3
+Apr 26, 2025 10:51:51 AM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 6
+Apr 26, 2025 10:51:51 AM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 2
+Apr 26, 2025 10:51:51 AM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 1
+2025.04.26 10:51:51 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala[0m
+2025.04.26 10:51:51 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 10:51:51 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 10:51:51 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala[0m
+2025.04.26 10:51:51 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala[0m
+2025.04.26 10:51:51 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 10:51:53 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 10:51:53 INFO  time: code lens generation in 1.44s[0m
+2025.04.26 10:51:53 INFO  time: code lens generation in 1.44s[0m
+2025.04.26 10:51:53 INFO  time: code lens generation in 1.2s[0m
+2025.04.26 10:51:55 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+Apr 26, 2025 10:51:57 AM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+Apr 26, 2025 10:51:57 AM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+2025.04.26 10:52:02 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 10:52:34 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 10:52:34 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:00:31 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:00:33 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:42 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala[0m
+2025.04.26 11:04:42 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:42 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:42 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:44 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala[0m
+2025.04.26 11:04:44 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:44 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:44 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:45 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficStatsAggregator.scala[0m
+2025.04.26 11:04:45 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficStatsAggregator.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:44 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficStatsAggregator.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:45 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficStatsAggregator.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:44 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficStatsAggregator.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:46 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficStatsAggregator.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:45 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficFeatsSelector.scala[0m
+2025.04.26 11:04:46 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficFeatsSelector.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:46 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficFeatsSelector.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:45 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficFeatsSelector.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:46 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficFeatsSelector.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:46 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficFeatsSelector.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:48 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala[0m
+2025.04.26 11:04:48 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:48 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:48 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:53 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala[0m
+2025.04.26 11:04:53 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:04:53 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:00 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:01 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:02 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:03 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:03 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:03 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:05 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:06 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:06 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+Apr 26, 2025 11:05:06 AM scala.meta.internal.metals.StdReporter $anonfun$create$1
+WARNING: empty definition using pc, found symbol in pc: `<none>`. (full report at: /home/csalhab/Desktop/flowtrack/.metals/.reports/metals-full/2025-04-26/r_empty-definition_11-05-06-949.md)
+2025.04.26 11:05:06 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:06 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:06 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+Apr 26, 2025 11:05:07 AM scala.meta.internal.metals.StdReporter $anonfun$create$1
+WARNING: empty definition using pc, found symbol in pc: `<none>`. (full report at: /home/csalhab/Desktop/flowtrack/.metals/.reports/metals-full/2025-04-26/r_empty-definition_11-05-06-949.md)
+2025.04.26 11:05:07 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+Apr 26, 2025 11:05:08 AM scala.meta.internal.metals.StdReporter $anonfun$create$1
+WARNING: empty definition using pc, found symbol in pc: `<none>`. (full report at: /home/csalhab/Desktop/flowtrack/.metals/.reports/metals-full/2025-04-26/r_empty-definition_11-05-06-949.md)
+2025.04.26 11:05:08 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+Apr 26, 2025 11:05:08 AM scala.meta.internal.metals.StdReporter $anonfun$create$1
+WARNING: empty definition using pc, found symbol in pc: `<none>`. (full report at: /home/csalhab/Desktop/flowtrack/.metals/.reports/metals-full/2025-04-26/r_empty-definition_11-05-06-949.md)
+2025.04.26 11:05:09 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+Apr 26, 2025 11:05:09 AM scala.meta.internal.metals.StdReporter $anonfun$create$1
+WARNING: empty definition using pc, found symbol in pc: `<none>`. (full report at: /home/csalhab/Desktop/flowtrack/.metals/.reports/metals-full/2025-04-26/r_empty-definition_11-05-06-949.md)
+2025.04.26 11:05:09 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:10 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:10 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:10 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:10 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+Apr 26, 2025 11:05:10 AM scala.meta.internal.metals.StdReporter $anonfun$create$1
+WARNING: empty definition using pc, found symbol in pc: `<none>`. (full report at: /home/csalhab/Desktop/flowtrack/.metals/.reports/metals-full/2025-04-26/r_empty-definition_11-05-06-949.md)
+2025.04.26 11:05:10 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:12 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:15 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:47 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:05:49 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:08:10 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:08:23 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala[0m
+2025.04.26 11:08:23 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:08:23 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:08:23 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:08:23 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala[0m
+2025.04.26 11:08:24 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:08:24 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:08:24 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala[0m
+2025.04.26 11:08:24 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:08:24 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:08:36 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 11:58:02 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:08:01 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:08:44 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:09:09 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:10:16 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:10:33 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala[0m
+2025.04.26 12:10:33 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:10:33 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:10:33 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:13:43 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:13:43 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala[0m
+2025.04.26 12:13:43 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:13:43 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:13:46 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala[0m
+2025.04.26 12:13:46 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:13:46 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:13:46 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:14:02 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala[0m
+2025.04.26 12:14:02 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:14:02 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:14:02 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:23 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala[0m
+2025.04.26 12:31:23 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:23 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:23 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:23 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala[0m
+2025.04.26 12:31:23 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:24 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:24 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:25 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala[0m
+2025.04.26 12:31:24 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:25 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:24 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:26 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/MainApp.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:26 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:25 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala[0m
+2025.04.26 12:31:26 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:26 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:27 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/streaming/TrafficStreamProcessor.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:27 WARN  no build target for: /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficFeatsSelector.scala[0m
+2025.04.26 12:31:27 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficFeatsSelector.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:27 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficFeatsSelector.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:27 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficFeatsSelector.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:27 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficStatsAggregator.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 12:31:29 INFO  no build target found for /home/csalhab/Desktop/flowtrack/src/main/scala/com/goamegah/flowtrack/transform/TrafficFeatsSelector.scala. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.04.26 14:11:05 INFO  Shutting down server[0m
+2025.04.26 14:11:05 INFO  shutting down Metals[0m
+2025.04.26 14:11:05 INFO  Exiting server[0m
