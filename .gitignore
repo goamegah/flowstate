@@ -15,11 +15,11 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-### Eclipse ###
+### Eclipse ###f
 .apt_generated
 .classpath
 .factorypath
-.project
+#.project
 .settings
 .springBeans
 .sts4-cache
@@ -55,7 +55,7 @@ build/
 ### local ###
 orc-env/
 .idea/
-project/
+#project/
 .env
 notes/
 *notes.txt
