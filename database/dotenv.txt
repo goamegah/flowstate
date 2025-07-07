@@ -1,5 +1,0 @@
-DWH_POSTGRES_HOST = "localhost"
-DWH_POSTGRES_PORT = "5432"
-DWH_POSTGRES_DB = "dwh_postgres_db"
-DWH_POSTGRES_USR = "dwh_postgres_user"
-DWH_POSTGRES_PWD = "dwh_postgres_password"
