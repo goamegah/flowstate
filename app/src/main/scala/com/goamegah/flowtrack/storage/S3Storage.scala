@@ -12,7 +12,8 @@ import com.goamegah.flowtrack.config.AppConfig
 
 import java.time.format.DateTimeFormatter
 import java.time.LocalDateTime
-import scala.jdk.CollectionConverters.CollectionHasAsScala
+//import scala.jdk.CollectionConverters.CollectionHasAsScala
+import scala.collection.JavaConverters._
 
 object S3Storage extends StorageBackend {
 

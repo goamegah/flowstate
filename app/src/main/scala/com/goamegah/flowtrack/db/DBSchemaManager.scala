@@ -50,12 +50,12 @@ object DBSchemaManager {
 
         try {
             // Exécution des tables
-            executeSqlFile("database/ddl/tables/create_road_traffic_stats_minute.sql")
-            executeSqlFile("database/ddl/tables/create_road_traffic_stats_hour.sql")
-            executeSqlFile("database/ddl/tables/create_road_traffic_stats_sliding_window.sql")
+            executeSqlFile("/opt/database/ddl/tables/create_road_traffic_stats_minute.sql")
+            executeSqlFile("/opt/database/ddl/tables/create_road_traffic_stats_hour.sql")
+            executeSqlFile("/opt/database/ddl/tables/create_road_traffic_stats_sliding_window.sql")
 
             // Exécution des vues
-            val viewDir = new File("database/ddl/views/")
+            val viewDir = new File("/opt/database/ddl/views/")
             if (viewDir.exists && viewDir.isDirectory) {
                 val viewFiles = viewDir.listFiles().filter(_.getName.endsWith(".sql")).sorted
                 viewFiles.foreach(view => executeSqlFile(view.getPath))
