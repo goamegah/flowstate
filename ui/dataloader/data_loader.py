@@ -8,10 +8,10 @@ load_dotenv()
 
 def get_db_engine():
     url = (
-        f"postgresql+psycopg2://{os.getenv('POSTGRES_USER')}:"
-        f"{os.getenv('POSTGRES_PASSWORD')}@"
-        f"{os.getenv('POSTGRES_HOST')}:{os.getenv('POSTGRES_PORT')}/"
-        f"{os.getenv('POSTGRES_DB')}"
+        f"postgresql+psycopg2://{os.getenv('DWH_POSTGRES_USR')}:"
+        f"{os.getenv('DWH_POSTGRES_PWD')}@"
+        f"{os.getenv('DWH_POSTGRES_HOST')}:{os.getenv('DWH_POSTGRES_PORT')}/"
+        f"{os.getenv('DWH_POSTGRES_DB')}"
     )
     return create_engine(url)
 
