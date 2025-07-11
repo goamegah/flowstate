@@ -20,11 +20,10 @@ cd flowtrack
 2. Set Up Docker Ensure Docker is installed and running.[ Docker installation guide](https://docs.docker.com/engine/install/)
 
 
-3. [Optional] Install Python Dependencies
+3.Rename env file from dotenv.txt to .env
 
 ```shell
-cd apps/ui
-pip install -r requirements.txt
+mv dotenv.txt .env
 ```
 
 4. Configure Environment Variables
