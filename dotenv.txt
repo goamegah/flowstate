@@ -19,15 +19,15 @@ AWS_REGION="eu-west-1"
 POSTGRES_USER="airflow"
 POSTGRES_PASSWORD="airflow"
 POSTGRES_DB="airflow"
-POSTGRES_HOST="ftk_afw_postgres_db"
+POSTGRES_HOST="postgres_db"
 POSTGRES_PORT="5432"
 
 # -----------------------------------------------------------------------------
-# Votre DWH PostgreSQL (ftk_dwh_postgres_db)
+# Votre DWH PostgreSQL (dwh_postgres_db)
 # -----------------------------------------------------------------------------
 # Typesafe Config lira ces variables si vous les nommez comme ci-dessous :
 DWH_POSTGRES_HOST="dwh-postgres-db"
-DWH_POSTGRES_PORT="5432"
+DWH_POSTGRES_PORT="5433"
 DWH_POSTGRES_DB="dwh_postgres_db"
 DWH_POSTGRES_USR="dwh_postgres_user"
 DWH_POSTGRES_PWD="dwh_postgres_password"
