@@ -4,7 +4,7 @@ FlowTrack is a real-time road traffic monitoring platform that ingests, processe
 
 Below the Reference Architecture:
 
-![Reference Architecture](./assets/test-e2e-serverless-aws.drawio.png)
+![Reference Architecture](./assets/docker_arch.png)
 
 
 ## Developer Setup
