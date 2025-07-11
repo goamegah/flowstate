@@ -23,7 +23,7 @@ POSTGRES_HOST="postgres_db"
 POSTGRES_PORT="5432"
 
 # -----------------------------------------------------------------------------
-# Votre DWH PostgreSQL (dwh_postgres_db)
+# DWH PostgreSQL (dwh_postgres_db)
 # -----------------------------------------------------------------------------
 # Typesafe Config lira ces variables si vous les nommez comme ci-dessous :
 DWH_POSTGRES_HOST="dwh-postgres-db"
