@@ -20,11 +20,14 @@ cd flowtrack
 2. Set Up Docker Ensure Docker is installed and running.[ Docker installation guide](https://docs.docker.com/engine/install/)
 
 
-3.Rename env file from dotenv.txt to .env
+3. Configure spark application
 
 ```shell
-mv dotenv.txt .env
+cd app/src/main/resources
 ```
+Edit `application.conf` to set your AWS S3 bucket and other configurations.
+
+
 
 4. Configure Environment Variables
 
