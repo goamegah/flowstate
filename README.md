@@ -42,7 +42,10 @@ Edit .env with your AWS and database credentials.
 ```shell
 docker-compose up -d
 ```
-6. Access the Dashboard
+
+6. go to airflow UI and trigger the DAG fetcher_to_raw.py
+
+7. Access the Dashboard
 
 * Streamlit UI: http://localhost:8501
 * Airflow: http://localhost:8080
