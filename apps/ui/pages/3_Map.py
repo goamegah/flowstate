@@ -14,8 +14,8 @@ from dataloader.data_loader import get_db_engine, run_query
 st.set_page_config(page_title="🗺️ Traffic Map", layout="wide")
 st.title("🗺️ Real-Time Traffic Map")
 
-# Rafraîchissement automatique toutes les 60 secondes
-st_autorefresh(interval=60 * 1000, key="map_refresh")
+# Change from 60s to 5 minutes
+st_autorefresh(interval=5 * 60 * 1000, key="home_refresh")
 
 engine = get_db_engine()
 

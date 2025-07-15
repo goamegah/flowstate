@@ -58,7 +58,7 @@ This project delivers a comprehensive real-time road traffic monitoring solution
 4. **[Optional] Install Dependencies**  
    Navigate to the appropriate directory and install the required Python packages.
 
-    ```bash
+    ```bashtreamlite
     # example of ui
     cd apps/ui
     pip install -r requirements.txt

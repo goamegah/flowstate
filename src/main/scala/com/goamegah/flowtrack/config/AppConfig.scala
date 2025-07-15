@@ -45,11 +45,11 @@ object AppConfig {
     val slidingWindowSlide: String = config.getString("streaming.slidingWindow.slide")
     val slidingWindowDurationMillis: Long = Duration(slidingWindowDuration).toMillis
     val slidingWindowSlideMillis: Long = Duration(slidingWindowSlide).toMillis
+    val watermarkThreshold: String = config.getString("streaming.watermark.threshold")
     val checkpointDir: String = config.getString("streaming.checkpointDir")
     val triggerInterval: String = config.getString("streaming.triggerInterval")
     val enableSlidingWindow: Boolean = config.getBoolean("streaming.enableSlidingWindow")
     val enableHourlyAggregation: Boolean = config.getBoolean("streaming.enableHourlyAggregation")
     val enableMinuteAggregation: Boolean = config.getBoolean("streaming.enableMinuteAggregation")
-
   }
 }

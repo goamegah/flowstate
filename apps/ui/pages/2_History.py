@@ -15,8 +15,8 @@ from dataloader.data_loader import (
 st.set_page_config(page_title="📊 Traffic History", layout="wide")
 st.title("📊 Traffic Evolution History")
 
-# Rafraîchissement auto
-st_autorefresh(interval=60 * 1000, key="history_refresh")
+# Change from 60s to 5 minutes
+st_autorefresh(interval=5 * 60 * 1000, key="home_refresh")
 
 engine = get_db_engine()
 

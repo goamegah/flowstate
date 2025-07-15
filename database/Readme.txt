@@ -1,9 +1,5 @@
 # Once launched the postgre container can be accessed
 
-# Find container id
-
-docker ps -a
-
 # Open an interactive terminal
 
 docker exec -it container_id bash

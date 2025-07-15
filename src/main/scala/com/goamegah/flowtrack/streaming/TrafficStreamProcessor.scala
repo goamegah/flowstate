@@ -71,11 +71,11 @@ object TrafficStreamProcessor {
           .option("multiLine", value = true)
           .json(AppConfig.Local.rawDir)
 
-        // TODO: Implement TrafficTransformer or replace with actual transformation logic
-        val transformed = TrafficTransformer.transform(rawStream)
 
+        val transformed = TrafficTransformer.transform(rawStream)
+        // Apply Watermark on transformed data (Accepts delayed data up to 1 minute after their production)
         val watermarkedDF = transformed
-          .withWatermark("datetime", "10 minutes")
+          .withWatermark("datetime", AppConfig.Streaming.watermarkThreshold)
 
         val triggerInterval = AppConfig.Streaming.triggerInterval
         val checkpointPath = AppConfig.Streaming.checkpointDir
@@ -109,11 +109,7 @@ object TrafficStreamProcessor {
 
               if (batchDF.count() > 0) {
                   try {
-                      // Vitesse moyenne par trafficstatus
                       val avgSpeedByMaxSpeedAndStatus = TrafficStatsAggregator.avgSpeedByMaxSpeedAndStatus(batchDF)
-                      println("############################################################")
-                      avgSpeedByMaxSpeedAndStatus.show()
-                      println("############################################################")
 
                       PostgresLoader.load(avgSpeedByMaxSpeedAndStatus, "avg_speed_by_max_speed_and_status")
 
