@@ -31,18 +31,18 @@ Before you begin, ensure you have the following software installed:
 
 ### Developer Setup
 
-1. Clone the repository:
+1. **Clone the repository**:
 ```bash
 git clone git@github.com:goamegah/flowtrack.git
 cd flowtrack
 ```
 
-2. Install dependencies:
+2. **Install dependencies**:
 ```bash
 docker compose up -d
 ```
 
-3. Go to airflow web UI:
+3. **Go to airflow web UI**:
 ```bash
 http://localhost:8080
 ```
@@ -74,7 +74,7 @@ This DAG run the main application that processes the raw data and stores the res
 ![clean up pipeline](assets/pl_clean_up.jpeg)
 DAG that cleans up the data from raw, transient and checkpoint folders.
 
-4. After running the DAGs, you can check the results in the **Streamlit** app web UI:
+4. **Check the results in the Streamlit app web UI**:
 ```bash
 http://localhost:8501
 ```
