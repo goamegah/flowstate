@@ -33,11 +33,21 @@ Before you begin, ensure you have the following software installed:
 
 1. **Clone the repository**:
 ```bash
-git clone git@github.com:goamegah/flowtrack.git
-cd flowtrack
+git clone git@github.com:goamegah/flowstate.git
+cd flowstate
 ```
 
-2. **Install dependencies**:
+2. **Create 3 folders**:
+```bash
+mkdir -p shared/data/transient # for intermediate data loading
+mkdir -p shared/data/raw # for raw data loading from transient folder
+mkdir -p shared/checkpoint # used by Spark for checkpointing
+mkdir -p shared/jars # for Spark application JAR file
+```
+
+`shared` is a bind volume that is mounted to the docker container to display the raw files in your IDE.
+
+2. **Run the Docker Compose**:
 ```bash
 docker compose up -d
 ```
@@ -63,8 +73,6 @@ After setting up the connection, you can see following 3 DAGs that you can run o
 
 ![alt text](assets/pl_load_raw_file.jpeg)
 This DAG loads the raw data from the Rennes Metropole API into the raw folder. It is scheduled to run every 1 minutes.
-
-In docker compose, a bind volume is mounted to display the raw files in your IDE. You can see the preview of the files in the ```shared/data/raw```  directory.
 
 - **pl_run_flowstate_mainapp_dag**
 
