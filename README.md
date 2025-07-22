@@ -53,9 +53,9 @@ You well need to create a connection to the API with the following parameters:
 - **Host**: https://data.rennesmetropole.fr/
 
 You can see following 3 DAGs:
-- **pl_load_flowstate_raw_files**: Main DAG that orchestrates the data flow.
+- **pl_load_flowstate_raw_files**: DAG that performs the ETL process.
 ![alt text](assets/pl_load_raw_file.jpeg)
-- **pl_run_flowstate_mainapp_dag**: DAG that performs the ETL process.
+- **pl_run_flowstate_mainapp_dag**: DAG that runs the main application logic.
 ![alt text](assets/pl_run_main_app.jpeg)
 - **clean up workflow**: DAG that cleans up the data from raw, transient and checkpoint folders.
 ![clean up pipeline](assets/pl_clean_up.jpeg)
