@@ -31,55 +31,49 @@ with DAG(
         mode="poke"
     )
 
-    # 2. Lancer le job Spark/Scala
-    #run_spark_job = BashOperator(
-    #    task_id='run_spark_ingestion',
-    #    bash_command='spark-submit --class com.goamegah.flowstate.extract.FetchAndStoreTrafficData /opt/airflow/jars/app.jar'
-    # )
+    source_to_transient = BashOperator(
+        task_id='source_to_transient',
+        bash_command="""
+        echo "=== DEBUG FLOWSTATE JAR ==="
+        
+        echo "1. Vérification du JAR:"
+        ls -la /opt/airflow/jars/app.jar
+        
+        echo "2. Taille du JAR:"
+        du -h /opt/airflow/jars/app.jar
+        
+        echo "3. Classes flowstate dans le JAR:"
+        jar tf /opt/airflow/jars/app.jar | grep -i flowstate
+        
+        echo "4. Toutes les classes principales:"
+        jar tf /opt/airflow/jars/app.jar | grep "\.class$" | grep -E "(extract|flowstate)" | head -20
+        
+        echo "5. Structure des packages:"
+        jar tf /opt/airflow/jars/app.jar | grep "com/goamegah" | head -10
+        
+        echo "6. Test spark-submit:"
+        spark-submit \
+            --class com.goamegah.flowstate.elt.SourceToTransient \
+            --master local[*] \
+            --verbose \
+            /opt/airflow/jars/app.jar
+        """,
+        dag=dag,
+    )
 
-source_to_transient = BashOperator(
-    task_id='source_to_transient',
-    bash_command="""
-    echo "=== DEBUG FLOWSTATE JAR ==="
-    
-    echo "1. Vérification du JAR:"
-    ls -la /opt/airflow/jars/app.jar
-    
-    echo "2. Taille du JAR:"
-    du -h /opt/airflow/jars/app.jar
-    
-    echo "3. Classes flowstate dans le JAR:"
-    jar tf /opt/airflow/jars/app.jar | grep -i flowstate
-    
-    echo "4. Toutes les classes principales:"
-    jar tf /opt/airflow/jars/app.jar | grep "\.class$" | grep -E "(extract|flowstate)" | head -20
-    
-    echo "5. Structure des packages:"
-    jar tf /opt/airflow/jars/app.jar | grep "com/goamegah" | head -10
-    
-    echo "6. Test spark-submit:"
-    spark-submit \
-        --class com.goamegah.flowstate.elt.SourceToTransient \
-        --master local[*] \
-        --verbose \
-        /opt/airflow/jars/app.jar
-    """,
-    dag=dag,
-)
-
-# 3. Envoie les données vers le sink
-transient_to_raw = BashOperator(
-    task_id='transient_to_raw',
-    bash_command="""
-    echo "=== Envoi des données vers le sink ==="
-    spark-submit \
-        --class com.goamegah.flowstate.elt.TransientToRaw \
-        --master local[*] \
-        --verbose \
-        /opt/airflow/jars/app.jar
-    """,
-    dag=dag,
-)
+    # 3. Envoie les données vers le sink
+    transient_to_raw = BashOperator(
+        task_id='transient_to_raw',
+        bash_command="""
+        echo "=== Envoi des données vers le sink ==="
+        spark-submit \
+            --class com.goamegah.flowstate.elt.TransientToRaw \
+            --master local[*] \
+            --verbose \
+            /opt/airflow/jars/app.jar
+        """,
+        dag=dag,
+    )
 
 
-check_api >> source_to_transient >> transient_to_raw
+    check_api >> source_to_transient >> transient_to_raw

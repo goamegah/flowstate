@@ -83,7 +83,7 @@ object TrafficStreamProcessor {
         val statsQuery = transformed.writeStream
             .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
                 val count = batchDF.count()
-                logger.info(s"📊 Batch $batchId - $count lignes (statistiques)")
+                logger.info(s"Batch $batchId - $count lignes (statistiques)")
 
                 if (count > 0 && enableMinuteAggregation) {
                     try {
