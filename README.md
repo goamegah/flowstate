@@ -9,27 +9,26 @@ Here's reference architecture of the project:
 ![Reference Architecture](./assets/arch.png)
 
 ## Table of Contents
-
-- [Getting Started](#getting-started)
+- [Technology Stack](#technology-stack)
 - [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Building and Running](#building-and-running)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
+- [Setup](#setup)
 
-## Getting Started
+### Technology Stack
 
-These instructions will help you get a copy of the project up and running on your local machine for development and testing purposes.
+- **Stream Processing**: Apache Spark 4.0.0
+- **Orchestration**: Apache Airflow 2.6.0
+- **Database**: PostgreSQL 13
+- **UI Framework**: Streamlit
+- **Build Tool**: SBT with Assembly plugin
+- **Containerization**: Docker & Docker Compose
+- **Language**: Scala 2.13.16
 
 ### Prerequisites
 Before you begin, ensure you have the following software installed:
 
 - **Docker**: [Install Docker](https://docs.docker.com/engine/install/)
 
-### Developer Setup
+### Setup
 
 1. **Clone the repository**:
 ```bash
