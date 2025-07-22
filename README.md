@@ -1,11 +1,10 @@
 <h1 align="center">End-To-End Near Real-time Road Traffic Monitoring Solution</h1>
 
+FlowState is a near real-time road traffic monitoring solution that leverages Apache Spark, Apache Airflow, and Docker to process and analyze traffic data. The project is designed to handle large volumes of data efficiently, providing insights into traffic patterns and conditions.
+This solution is built to be scalable and robust, making it suitable for real-world applications in traffic management and urban planning.
 
-
+Here's reference architecture of the project:
 ![Reference Architecture](./assets/arch.png)
-# Project Name
-
-Brief description of what your project does and its main purpose.
 
 ## Table of Contents
 
@@ -52,10 +51,12 @@ You well need to create a connection to the API with the following parameters:
 - **Conn Type**: HTTP
 - **Host**: https://data.rennesmetropole.fr/
 
-You can see following 3 DAGs:
+This connection is used to check the API availability
+
+After setting up the connection, you can see following 3 DAGs:
 - **pl_load_flowstate_raw_files**: DAG that performs the ETL process.
 ![alt text](assets/pl_load_raw_file.jpeg)
 - **pl_run_flowstate_mainapp_dag**: DAG that runs the main application logic.
 ![alt text](assets/pl_run_main_app.jpeg)
-- **clean up workflow**: DAG that cleans up the data from raw, transient and checkpoint folders.
+- **pl_clean_up_flowstate_folders_dag**: DAG that cleans up the data from raw, transient and checkpoint folders.
 ![clean up pipeline](assets/pl_clean_up.jpeg)
