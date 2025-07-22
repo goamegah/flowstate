@@ -64,6 +64,8 @@ After setting up the connection, you can see following 3 DAGs that you can run o
 ![alt text](assets/pl_load_raw_file.jpeg)
 This DAG loads the raw data from the Rennes Metropole API into the raw folder. It is scheduled to run every 1 minutes.
 
+In docker compose, a bind volume is mounted to display the raw files in your IDE. You can see the preview of the files in the ```shared/data/raw```  directory.
+
 - **pl_run_flowstate_mainapp_dag**
 
 ![alt text](assets/pl_run_main_app.jpeg)
