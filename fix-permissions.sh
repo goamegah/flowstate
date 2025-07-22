@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Répertoire racine du projet (à adapter si besoin)
-PROJECT_DIR="/home/goamegah/Documents/develop/esgi/4a/s2/spark/projet/flowstate"
+PROJECT_DIR=$PWD
 
 echo "=>  Correction des permissions dans le dossier target..."
 
