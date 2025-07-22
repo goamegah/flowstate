@@ -1,0 +1,47 @@
+# dockerfile
+
+# ================================
+# Build stage
+# ================================
+### FROM hseeberger/scala-sbt:eclipse-temurin-11.0.14.1_1.6.2_2.13.8 AS build
+FROM sbtscala/scala-sbt:eclipse-temurin-17.0.15_6_1.11.3_2.13.16 AS build
+
+WORKDIR /app
+
+# options mémoire pour SBT (2 à 4 Go)
+ENV SBT_OPTS="-Xmx4G -XX:+UseG1GC"
+
+COPY build.sbt ./
+COPY project ./project
+COPY src ./src
+
+RUN sbt clean compile assembly
+
+# ================================
+
+# Vérifie que le JAR a été créé
+RUN ls -la /app/target/scala-2.13/ && \
+    test -f /app/target/scala-2.13/flowstate-assembly.jar
+
+# ================================
+# Stage final - Copie du JAR vers le volume Airflow
+# ================================
+FROM alpine:latest
+
+WORKDIR /app
+
+# Copie le JAR compilé
+COPY --from=build /app/target/scala-2.13/flowstate-assembly.jar ./app.jar
+
+# Script pour copier le JAR vers le volume partagé avec Airflow
+RUN echo '#!/bin/sh' > /app/deploy_jar.sh && \
+    echo 'echo "=== Déploiement du JAR pour Airflow ==="' >> /app/deploy_jar.sh && \
+    echo 'mkdir -p /opt/airflow/jars' >> /app/deploy_jar.sh && \
+    echo 'cp /app/app.jar /opt/airflow/jars/app.jar' >> /app/deploy_jar.sh && \
+    echo 'echo "JAR déployé : /opt/airflow/jars/app.jar"' >> /app/deploy_jar.sh && \
+    echo 'ls -la /opt/airflow/jars/' >> /app/deploy_jar.sh && \
+    echo 'echo "=== Prêt pour Airflow ==="' >> /app/deploy_jar.sh && \
+    chmod +x /app/deploy_jar.sh
+
+# Le conteneur se contente de copier le JAR et se termine
+CMD ["/app/deploy_jar.sh"]

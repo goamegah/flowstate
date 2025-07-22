@@ -1,8 +1,15 @@
-CREATE TABLE IF NOT EXISTS road_traffic_feats_map (
-    timestamp TIMESTAMP,
-    period TIMESTAMP,
-    location_id TEXT,
-    road_name TEXT,
-    road_category TEXT,
-    traffic_status TEXT
+DROP TABLE IF EXISTS road_traffic_feats_map CASCADE;
+
+CREATE TABLE road_traffic_feats_map (
+                                        segment_id INT,
+                                        denomination TEXT,
+                                        lat DOUBLE PRECISION,
+                                        lon DOUBLE PRECISION,
+                                        coordinates TEXT,
+                                        shape_type TEXT,
+                                        trafficstatus TEXT,
+                                        averagevehiclespeed INT,
+                                        traveltime INT,
+                                        timestamp TIMESTAMP,
+                                        traffic_speed_category TEXT
 );
