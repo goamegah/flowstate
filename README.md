@@ -59,17 +59,24 @@ You well need to create a connection to the API with the following parameters:
 This connection is used to check the API availability
 
 After setting up the connection, you can see following 3 DAGs that you can run one after another:
-1. **pl_load_flowstate_raw_files**
+- **pl_load_flowstate_raw_files**
 
 ![alt text](assets/pl_load_raw_file.jpeg)
 This DAG loads the raw data from the Rennes Metropole API into the raw folder. It is scheduled to run every 1 minutes.
 
-2. **pl_run_flowstate_mainapp_dag**
+- **pl_run_flowstate_mainapp_dag**
 
 ![alt text](assets/pl_run_main_app.jpeg)
 This DAG run the main application that processes the raw data and stores the results in the data warehouse. It's not scheduled to run automatically, you can trigger it manually from the Airflow UI.
 
-3. **[Optional] pl_clean_up_flowstate_folders_dag**: 
+- **[Optional] pl_clean_up_flowstate_folders_dag**: 
 
 ![clean up pipeline](assets/pl_clean_up.jpeg)
 DAG that cleans up the data from raw, transient and checkpoint folders.
+
+4. After running the DAGs, you can check the results in the **Streamlit** app web UI:
+```bash
+http://localhost:8501
+```
+
+![alt text](assets/flowtrack_history.jpeg)
