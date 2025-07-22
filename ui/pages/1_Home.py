@@ -8,7 +8,7 @@ from dataloader.data_loader import get_db_engine, run_query
 st.set_page_config(page_title="🏠 Home - Traffic Overview", layout="wide")
 st.title("🏠 Aperçu du trafic urbain")
 
-# 🔁 Rafraîchissement automatique toutes les 60 secondes
+# Rafraîchissement automatique toutes les 60 secondes
 st_autorefresh(interval=60 * 1000, key="refresh-home")
 
 # --- Connexion à la base ---

@@ -31,12 +31,6 @@ with DAG(
         mode="poke"
     )
 
-    # 2. Lancer le job Spark/Scala
-    #run_spark_job = BashOperator(
-    #    task_id='run_spark_ingestion',
-    #    bash_command='spark-submit --class com.goamegah.flowstate.extract.FetchAndStoreTrafficData /opt/airflow/jars/app.jar'
-    # )
-
 source_to_transient = BashOperator(
     task_id='source_to_transient',
     bash_command="""

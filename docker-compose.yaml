@@ -276,31 +276,6 @@ services:
                 condition: service_completed_successfully
 
     # ----------------------------------------------------------------
-    # Spark App (lecteur du dossier raw)
-    # ----------------------------------------------------------------
-    #    spark-app:
-    #        build:
-    #            context: .
-    #        container_name: spark_app
-    #        user: root
-    #        env_file:
-    #            - .env
-    #        environment:
-    #            - SPARK_MASTER=local[*]
-    #            - HADOOP_USER_NAME=root
-    #        volumes:
-    #            # monte le dossier airflow/data (qui contient maintenant raw/) en lecture-écriture
-    #            # - ./airflow/data:/opt/airflow/data:rw
-    #            # monte vos scripts DDL
-    #            - host-shared-data:/opt/airflow/data:rw
-    #            - ./database:/opt/database:ro
-    #        depends_on:
-    #            dwh-postgres-db:
-    #                condition: service_healthy
-    #        networks:
-    #            - db-network
-
-    # ----------------------------------------------------------------
     # Streamlit
     # ----------------------------------------------------------------
     streamlit:

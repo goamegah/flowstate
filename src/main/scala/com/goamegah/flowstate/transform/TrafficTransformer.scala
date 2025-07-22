@@ -42,12 +42,6 @@ object TrafficTransformer {
     def transform(df: DataFrame): DataFrame = {
         df
             .withColumn("timestamp", to_timestamp(col("datetime"))) // Conversion explicite
-//            withColumn("timestamp",
-//                to_utc_timestamp(
-//                    to_timestamp(col("datetime")),
-//                    "Europe/Paris"  // Vos données source sont en heure de Paris
-//                )
-//            )
             .withColumn("period", window(col("timestamp"), "1 minute").getField("start"))
             .withColumnRenamed("id_rva_troncon_fcd_v1_1", "segment_id")
             .withColumn("coordinates", to_json(col("geo_shape.geometry.coordinates")))

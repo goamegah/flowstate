@@ -45,20 +45,3 @@ RUN echo '#!/bin/sh' > /app/deploy_jar.sh && \
 
 # Le conteneur se contente de copier le JAR et se termine
 CMD ["/app/deploy_jar.sh"]
-
-# ================================
-# Production stage (avec Spark)
-# ================================
-###FROM bitnami/spark:3.5.5
-
-# Définit un HOME absolu pour Ivy
-###ENV HOME=/opt/spark/app
-
-###WORKDIR /opt/spark/app
-###RUN mkdir -p $HOME/.ivy2
-
-# Copie le fat-jar généré pour Scala 2.13
-###COPY --from=build ./target/scala-2.13/flowstate-assembly.jar app.jar
-
-# Lance le job Spark avec spark-submit
-###ENTRYPOINT ["spark-submit", "--class", "com.goamegah.flowstate.MainApp", "--master", "local[*]", "--conf", "spark.jars.ivy=/opt/spark/app/.ivy2", "--conf", "spark.hadoop.hadoop.security.authentication=simple", "app.jar"]

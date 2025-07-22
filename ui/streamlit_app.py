@@ -7,12 +7,8 @@ st.set_page_config(
     page_icon="🚦"
 )
 
-# 🎨 En-tête
 st.title("🚦 Welcome to FlowTrack")
 st.subheader("Real-Time Urban Traffic Intelligence")
-
-# 🖼️ Image de bannière (optionnelle)
-# st.image("assets/flowtrack_banner.png", use_column_width=True)
 
 # --- Présentation ---
 st.markdown("---")
@@ -31,10 +27,10 @@ Elle vise à rendre le trafic urbain plus lisible et exploitable grâce à une i
 ---
 """)
 
-# 📌 Infos de navigation
+# Infos de navigation
 st.info("👉 Utilisez le **menu à gauche** pour accéder aux pages : `Home`, `Map`, et `History`.")
 
-# 📈 Raccourci vers l'historique
+# Raccourci vers l'historique
 if st.button("📈 Voir l'évolution du trafic"):
     st.switch_page("pages/3_History.py")
 
