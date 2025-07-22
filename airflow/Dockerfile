@@ -1,29 +1,30 @@
+# airflow/Dockerfile.txt
+
 FROM apache/airflow:2.6.0
 
-# Passer root pour installer des dépendances système
+# Étape 1 : Installer Java (Spark en a besoin)
 USER root
+# RUN apt-get update && apt-get install -y curl openjdk-11-jdk && apt-get clean
+RUN apt-get update && apt-get install -y curl openjdk-17-jdk && apt-get clean
 
-# Installer Java et outils nécessaires
-RUN apt-get update && apt-get install -y openjdk-11-jdk curl && \
-    apt-get clean
 
-# Variables d'environnement pour Spark
-ENV SPARK_VERSION=3.4.1
+# Étape 2 : Installer Spark avec gestion d'erreur
+ENV SPARK_VERSION=4.0.0
 ENV HADOOP_VERSION=3
 ENV SPARK_HOME=/opt/spark
-ENV PATH=$PATH:$SPARK_HOME/bin
+RUN mkdir -p /opt && \
+    curl -L -o /tmp/spark.tgz https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
+    tar -xzf /tmp/spark.tgz -C /opt && \
+    mv /opt/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} ${SPARK_HOME} && \
+    rm /tmp/spark.tgz
+ENV PATH="${SPARK_HOME}/bin:$PATH"
 
-# Télécharger et installer Spark
-RUN curl -fSL https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
-    | tar -xz -C /opt && \
-    mv /opt/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} /opt/spark
-
-# Revenir à l'utilisateur airflow
+# Étape 3 : Passer à l'utilisateur airflow AVANT d'installer les packages Python
 USER airflow
 
-# Copier les DAGs dans l'image
-COPY dags /opt/airflow/dags/
-
-# Installer les dépendances Python si besoin
+# Étape 4 : Installer Python requirements
 COPY requirements.txt /requirements.txt
 RUN pip install --no-cache-dir -r /requirements.txt
+
+# Étape 5 : Copier les DAGs
+COPY dags/ /opt/airflow/dags/

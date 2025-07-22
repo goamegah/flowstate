@@ -1,12 +1,16 @@
-CREATE TABLE IF NOT EXISTS traffic_stats_sliding_window (
-                                                            window_start TIMESTAMP,
-                                                            window_end TIMESTAMP,
-                                                            num_troncon INTEGER,
-                                                            total_vehicle_probe INTEGER,
-                                                            average_speed DOUBLE PRECISION,
-                                                            average_travel_time DOUBLE PRECISION,
-                                                            average_travel_time_reliability DOUBLE PRECISION,
-                                                            road_name TEXT,
-                                                            max_speed INTEGER,
-                                                            traffic_status_list TEXT[]
+DROP TABLE IF EXISTS road_traffic_stats_sliding_window CASCADE;
+
+CREATE TABLE road_traffic_stats_sliding_window (
+                                                   period TIMESTAMP,
+                                                   segment_id INT,
+                                                   trafficstatus TEXT,
+                                                   denomination TEXT,
+                                                   avg_speed DOUBLE PRECISION,
+                                                   min_speed DOUBLE PRECISION,
+                                                   max_speed DOUBLE PRECISION,
+                                                   stddev_speed DOUBLE PRECISION,
+                                                   avg_travel_time DOUBLE PRECISION,
+                                                   avg_reliability DOUBLE PRECISION,
+                                                   avg_latency_sec DOUBLE PRECISION,
+                                                   count BIGINT
 );

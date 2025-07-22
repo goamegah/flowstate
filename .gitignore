@@ -71,3 +71,9 @@ ui_env/
 *.jar
 sbt-custom
 sbt-1.9.7.tgz
+shared/
+.metals/
+.streamlit/
+checkpoint/
+jars/
+project/
