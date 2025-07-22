@@ -37,6 +37,11 @@ git clone git@github.com:goamegah/flowstate.git
 cd flowstate
 ```
 
+2. **Rename the `dotenv.txt` file to `.env`**:
+```bash
+mv dotenv.txt .env
+```
+
 2. **Create 3 folders**:
 ```bash
 mkdir -p shared/data/transient # for intermediate data loading
