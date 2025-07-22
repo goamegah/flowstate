@@ -18,7 +18,7 @@ object TrafficStreamProcessor {
     private val logger = LoggerFactory.getLogger(this.getClass)
 
     def start(): Unit = {
-        logger.info("[OK] ▶️ Démarrage du streaming...")
+        logger.info("[OK] Démarrage du streaming...")
 
         import java.nio.file.{Files, Paths}
         val rawPath = Paths.get(AppConfig.Spark.rawDir)
@@ -37,10 +37,10 @@ object TrafficStreamProcessor {
             //.option("recursiveFileLookup", value = true)
             .json(s"${AppConfig.Spark.rawDir}")
 
-        println("[DEBUG] ✅ Affichage du schéma brut :")
+        println("[DEBUG] Affichage du schéma brut :")
         rawStream.printSchema()
 
-        println("[DEBUG] ✅ Exemple de données brutes (statique pour debug) :")
+        println("[DEBUG] Exemple de données brutes (statique pour debug) :")
         val staticSample = spark.read
             .schema(TrafficTransformer.schema)
             .json(s"${AppConfig.Spark.rawDir}")
@@ -59,7 +59,7 @@ object TrafficStreamProcessor {
         val mapsQuery = transformed.writeStream
             .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
                 val count = batchDF.count()
-                logger.info(s"🗺️  Batch $batchId - $count lignes (cartographie)")
+                logger.info(s"Batch $batchId - $count lignes (cartographie)")
 
                 if (count > 0) {
                     try {
@@ -82,7 +82,7 @@ object TrafficStreamProcessor {
         val statsQuery = transformed.writeStream
             .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
                 val count = batchDF.count()
-                logger.info(s"📊 Batch $batchId - $count lignes (statistiques)")
+                logger.info(s"Batch $batchId - $count lignes (statistiques)")
 
                 if (count > 0 && enableMinuteAggregation) {
                     try {
@@ -116,7 +116,7 @@ object TrafficStreamProcessor {
     }
 
     def stop(): Unit = {
-        logger.info("[STOP] ⏹️  Arrêt du streaming...")
+        logger.info("[STOP] Arrêt du streaming...")
         spark.stop()
     }
 }
