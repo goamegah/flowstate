@@ -1,116 +1,156 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-from datetime import datetime
+from dataloader.data_loader import get_db_engine, run_query
 from streamlit_autorefresh import st_autorefresh
+from datetime import datetime
 
-from dataloader.data_loader import (
-    get_db_engine,
-    run_query,
-    get_available_road_names,
-    get_period_bounds_query,
-    get_traffic_history_query,
+st.set_page_config(page_title="📈 History - Traffic Trends", layout="wide")
+st.title("📈 Historique du trafic urbain")
+
+# Rafraîchissement auto (toutes les 60 secondes)
+st_autorefresh(interval=60 * 1000, key="refresh-history")
+
+# --- Résolution temporelle ---
+if "resolution" not in st.session_state:
+    st.session_state["resolution"] = "minute"
+
+resolution = st.radio(
+    "⏱️ Résolution :",
+    options=["minute", "hour"],
+    horizontal=True,
+    index=["minute", "hour"].index(st.session_state["resolution"])
 )
+st.session_state["resolution"] = resolution
 
-st.set_page_config(page_title="📊 Traffic History", layout="wide")
-st.title("📊 Traffic Evolution History")
-
-# Rafraîchissement auto
-st_autorefresh(interval=60 * 1000, key="history_refresh")
-
+# --- Connexion ---
 engine = get_db_engine()
 
-resolution = st.radio("⏱️ Temporal Resolution", ["minute", "hour"], horizontal=True)
+# --- Chargement des données ---
+@st.cache_data(ttl=60)
+def load_history_data(res: str) -> pd.DataFrame:
+    table = f"road_traffic_stats_{res}"
+    query = f"""
+        SELECT
+            period,
+            segment_id,
+            denomination,
+            trafficstatus,
+            avg_speed,
+            avg_travel_time,
+            avg_reliability,
+            count
+        FROM {table}
+        ORDER BY period DESC
+    """
+    return run_query(engine, query)
 
-if "selected_road" not in st.session_state:
-    st.session_state.selected_road = get_available_road_names(engine, resolution)[0]
+df = load_history_data(resolution)
 
-road_name = st.selectbox(
-    "🛣️ Road Name",
-    get_available_road_names(engine, resolution),
-    index=get_available_road_names(engine, resolution).index(st.session_state.selected_road),
-    key="selected_road",
+if df.empty:
+    st.warning("❌ Aucune donnée disponible.")
+    st.stop()
+
+# --- Dernière actualisation ---
+latest_ts = pd.to_datetime(df["period"].max())
+st.markdown(f"🕒 Dernière actualisation : **{latest_ts.strftime('%d/%m/%Y %H:%M:%S')}**")
+
+# --- Comparaison avec période précédente ---
+periods = df["period"].dropna().sort_values().unique()
+if len(periods) >= 2:
+    current_period = periods[-1]
+    previous_period = periods[-2]
+
+    df_current = df[df["period"] == current_period]
+    df_previous = df[df["period"] == previous_period]
+
+    delta_speed = round(df_current["avg_speed"].mean() - df_previous["avg_speed"].mean(), 2)
+    delta_travel = round(df_current["avg_travel_time"].mean() - df_previous["avg_travel_time"].mean(), 2)
+    delta_reliab = round(df_current["avg_reliability"].mean() - df_previous["avg_reliability"].mean(), 2)
+else:
+    delta_speed = delta_travel = delta_reliab = None
+
+# --- KPIs globaux ---
+avg_speed = round(df["avg_speed"].mean(), 2)
+max_speed = round(df["avg_speed"].max(), 2)
+avg_travel = round(df["avg_travel_time"].mean(), 2)
+avg_reliab = round(df["avg_reliability"].mean(), 2)
+nb_rows = len(df)
+
+st.markdown("### 📊 Indicateurs globaux")
+k1, k2, k3, k4 = st.columns(4)
+k1.metric("🚗 Vitesse moyenne", f"{avg_speed} km/h", delta=f"{delta_speed} km/h" if delta_speed is not None else None)
+k2.metric("⏱️ Temps de trajet moyen", f"{avg_travel} min", delta=f"{delta_travel} min" if delta_travel is not None else None)
+k3.metric("📶 Fiabilité moyenne", f"{avg_reliab}", delta=f"{delta_reliab}" if delta_reliab is not None else None)
+k4.metric("📈 Nombres de mesures", nb_rows)
+
+# --- Filtres interactifs ---
+st.markdown("### 🎯 Filtres")
+col1, col2, col3 = st.columns([3, 3, 2])
+
+route_opts = ["Toutes"] + sorted(df["denomination"].dropna().unique())
+status_opts = ["Tous"] + sorted(df["trafficstatus"].dropna().unique())
+
+# --- Initialisation session_state ---
+for key, default in [("selected_route", "Toutes"), ("selected_status", "Tous"), ("ignore_status", False)]:
+    if key not in st.session_state:
+        st.session_state[key] = default
+
+with col1:
+    selected_route = st.selectbox("🛣️ Choisir une route :", route_opts, index=route_opts.index(st.session_state["selected_route"]))
+    st.session_state["selected_route"] = selected_route
+with col2:
+    selected_status = st.selectbox("🚦 Choisir un statut :", status_opts, index=status_opts.index(st.session_state["selected_status"]))
+    st.session_state["selected_status"] = selected_status
+with col3:
+    ignore_status = st.checkbox("🧮 Agréger tous les statuts", value=st.session_state["ignore_status"])
+    st.session_state["ignore_status"] = ignore_status
+
+# --- Application des filtres ---
+filtered_df = df.copy()
+if selected_route != "Toutes":
+    filtered_df = filtered_df[filtered_df["denomination"] == selected_route]
+if not ignore_status and selected_status != "Tous":
+    filtered_df = filtered_df[filtered_df["trafficstatus"] == selected_status]
+
+if filtered_df.empty:
+    st.info("Aucune donnée disponible avec ces filtres.")
+    st.stop()
+
+# --- Graphiques ---
+def make_line_chart(df, y_column, label):
+    return (
+        alt.Chart(df)
+        .mark_line(point=True)
+        .encode(
+            x=alt.X("period:T", title="Période"),
+            y=alt.Y(f"{y_column}:Q", title=label),
+            color=alt.Color("denomination:N" if ignore_status else "trafficstatus:N", title="Légende"),
+            tooltip=["period:T", "denomination", "trafficstatus", y_column]
+        )
+        .properties(height=300)
+    )
+
+st.markdown("### 📉 Visualisation des indicateurs")
+
+tab1, tab2, tab3 = st.tabs(["🚗 Vitesse", "⏱️ Temps de trajet", "📶 Fiabilité"])
+
+with tab1:
+    st.altair_chart(make_line_chart(filtered_df, "avg_speed", "Vitesse (km/h)"), use_container_width=True)
+with tab2:
+    st.altair_chart(make_line_chart(filtered_df, "avg_travel_time", "Temps de trajet (min)"), use_container_width=True)
+with tab3:
+    st.altair_chart(make_line_chart(filtered_df, "avg_reliability", "Fiabilité"), use_container_width=True)
+
+# --- Export CSV ---
+st.markdown("### 📥 Export CSV")
+st.download_button(
+    label="💾 Télécharger les données",
+    data=filtered_df.to_csv(index=False).encode("utf-8"),
+    file_name=f"traffic_history_{resolution}.csv",
+    mime="text/csv"
 )
 
-@st.cache_data(ttl=60)
-def get_period_bounds(resolution: str, road_name: str):
-    sql = get_period_bounds_query(resolution)
-    df = run_query(engine, sql, params={"road_name": road_name})
-    return (
-        df["min_period"][0].to_pydatetime(),
-        df["max_period"][0].to_pydatetime(),
-    )
-
-min_p, max_p = get_period_bounds(resolution, road_name)
-if min_p == max_p:
-    st.warning("⚠️ Pas assez de données pour cette route et cette résolution.")
-    st.stop()
-
-col1, col2 = st.columns(2)
-with col1:
-    start_date = st.slider(
-        "📅 Start", min_value=min_p, max_value=max_p, value=min_p,
-        format="YYYY-MM-DD HH:mm"
-    )
-with col2:
-    end_date = st.slider(
-        "📅 End", min_value=min_p, max_value=max_p, value=max_p,
-        format="YYYY-MM-DD HH:mm"
-    )
-
-@st.cache_data(ttl=30)
-def load_history(resolution: str, road_name: str,
-                 start_date: datetime, end_date: datetime):
-    sql = get_traffic_history_query(resolution)
-    return run_query(
-        engine,
-        sql,
-        params={"road_name": road_name, "start": start_date, "end": end_date},
-    )
-
-df = load_history(resolution, road_name, start_date, end_date)
-if df.empty:
-    st.warning("⚠️ Aucune donnée disponible pour les filtres choisis.")
-    st.stop()
-
-# Indicateurs clés
-kpi_speed       = df["average_speed"].mean()
-kpi_travel_time = df["average_travel_time"].mean()
-max_speed       = df["average_speed"].max()
-min_speed       = df["average_speed"].min()
-
-st.markdown("## 📈 Indicateurs clés")
-c1, c2, c3, c4 = st.columns(4)
-c1.metric("🚀 Vitesse moyenne",    f"{kpi_speed:.2f} km/h")
-c2.metric("⏱️ Temps moyen trajet", f"{kpi_travel_time:.2f} min")
-c3.metric("📈 Vitesse max",       f"{max_speed:.2f} km/h",
-         delta=f"{(max_speed - kpi_speed):+.2f}")
-c4.metric("📉 Vitesse min",       f"{min_speed:.2f} km/h",
-         delta=f"{(min_speed - kpi_speed):+.2f}")
-
-st.markdown("## 📊 Évolution temporelle")
-col_s, col_t = st.columns(2)
-
-with col_s:
-    st.altair_chart(
-        alt.Chart(df).mark_line(point=True).encode(
-            x=alt.X("period:T", title="Time"),
-            y=alt.Y("average_speed:Q", title="Average Speed (km/h)"),
-            tooltip=["period:T", "average_speed", "average_travel_time"],
-        ).properties(width="container", height=400, title="🚗 Speed Evolution"),
-        use_container_width=True,
-    )
-
-with col_t:
-    st.altair_chart(
-        alt.Chart(df).mark_line(point=True).encode(
-            x=alt.X("period:T", title="Time"),
-            y=alt.Y("average_travel_time:Q", title="Avg Travel Time (min)"),
-            tooltip=["period:T", "average_speed", "average_travel_time"],
-        ).properties(width="container", height=400,
-                     title="⏱️ Travel Time Evolution"),
-        use_container_width=True,
-    )
-
-with st.expander("🔍 Voir les données brutes"):
-    st.dataframe(df)
+# --- Données brutes ---
+with st.expander("🔎 Voir les données filtrées"):
+    st.dataframe(filtered_df, use_container_width=True)

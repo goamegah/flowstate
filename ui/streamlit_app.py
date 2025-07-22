@@ -1,37 +1,46 @@
-# streamlit_app.py
-
 import streamlit as st
+from PIL import Image
 
 st.set_page_config(
-    page_title="FlowTrack - Real-Time Traffic Monitoring",
-    layout="wide"
+    page_title="🚦 FlowTrack - Real-Time Traffic Monitoring",
+    layout="wide",
+    page_icon="🚦"
 )
 
-# 🎨 Mise en page principale
+# 🎨 En-tête
 st.title("🚦 Welcome to FlowTrack")
 st.subheader("Real-Time Urban Traffic Intelligence")
 
-# 📷 Image d'accueil
+# 🖼️ Image de bannière (optionnelle)
 # st.image("assets/flowtrack_banner.png", use_column_width=True)
 
-# ✨ Introduction
+# --- Présentation ---
+st.markdown("---")
 st.markdown("""
----
 ### 🌟 Pourquoi FlowTrack ?
+
 **FlowTrack** est une plateforme de surveillance et d'analyse du trafic en temps réel.  
-Grâce à une visualisation intuitive et des indicateurs clés, nous vous aidons à :
-- Suivre l'état du trafic urbain
-- Visualiser les tronçons de route critiques
-- Anticiper la congestion
-- Analyser les performances de circulation
-- Améliorer la prise de décision en mobilité
+Elle vise à rendre le trafic urbain plus lisible et exploitable grâce à une interface moderne et intuitive.
+
+🔍 Fonctionnalités clés :
+- Visualisation **en direct** de l’état des routes
+- Analyse de l’**évolution du trafic** (vitesse, statut, temps de trajet)
+- Mise en évidence des **zones critiques** (bouchons, ralentissements)
+- Suivi des **tronçons routiers** et comparaison des performances
 
 ---
 """)
 
-# 🔥 Petit rappel pour utiliser le dashboard
-st.info("👉 Utilisez le **menu latéral** pour naviguer entre les différentes fonctionnalités : historique, carte, indicateurs clés, et plus à venir ! 🚀")
+# 📌 Infos de navigation
+st.info("👉 Utilisez le **menu à gauche** pour accéder aux pages : `Home`, `Map`, et `History`.")
 
-# (Facultatif) Un bouton simple pour aller directement vers l'historique
+# 📈 Raccourci vers l'historique
 if st.button("📈 Voir l'évolution du trafic"):
-    st.switch_page("pages/2_History.py")
+    st.switch_page("pages/3_History.py")
+
+# Footer
+st.markdown("---")
+st.markdown(
+    "<small>💡 Plateforme développée avec Streamlit • Altair • PostgreSQL • Spark Streaming</small>",
+    unsafe_allow_html=True
+)

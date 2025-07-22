@@ -1,3 +1,4 @@
+# ui/dataloader/data_loader.py
 import os
 import pandas as pd
 from sqlalchemy import create_engine, text
@@ -15,45 +16,45 @@ def get_db_engine():
     )
     return create_engine(url)
 
-def run_query(engine, query: str, params: dict = None) -> pd.DataFrame:
-    """
-    Exécute une requête SQL via SQLAlchemy.  
-    Utilise des placeholders :name et renvoie un DataFrame.
-    """
-    stmt = text(query)
-    with engine.connect() as conn:
-        result = conn.execute(stmt, params or {})
-        df = pd.DataFrame(result.fetchall(), columns=result.keys())
-    return df
 
-def get_available_road_names(engine, resolution: str) -> list:
-    sql = f"""
-        SELECT DISTINCT road_name
-        FROM road_traffic_stats_{resolution}
-        WHERE road_name IS NOT NULL
-        ORDER BY road_name
-    """
+# Exécute une requête SQL et retourne un DataFrame
+def run_query(engine, sql: str) -> pd.DataFrame:
+    with engine.connect() as connection:
+        return pd.read_sql(text(sql), connection)
+
+# Nombre de tronçons fermés (status = "fermé" ou "closed")
+def get_closed_segments_count(engine) -> int:
+    sql = """
+          SELECT COUNT(*) FROM road_traffic_feats_map
+          WHERE traffic_status ILIKE 'fermé'
+            AND period = (SELECT MAX(period) FROM road_traffic_feats_map) \
+          """
+    return run_query(engine, sql).iloc[0, 0]
+
+# Pourcentage de tronçons congestionnés
+def get_congested_percentage(engine) -> float:
+    sql_total = """
+                SELECT COUNT(*) FROM road_traffic_feats_map
+                WHERE period = (SELECT MAX(period) FROM road_traffic_feats_map) \
+                """
+    sql_congested = """
+                    SELECT COUNT(*) FROM road_traffic_feats_map
+                    WHERE traffic_status ILIKE 'congestionné'
+                      AND period = (SELECT MAX(period) FROM road_traffic_feats_map) \
+                    """
+    total = run_query(engine, sql_total).iloc[0, 0]
+    congested = run_query(engine, sql_congested).iloc[0, 0]
+    return (congested / total) * 100 if total > 0 else 0.0
+
+# Catégorie de route dominante
+def get_dominant_road_category(engine) -> str:
+    sql = """
+          SELECT road_category
+          FROM road_traffic_feats_map
+          WHERE period = (SELECT MAX(period) FROM road_traffic_feats_map)
+          GROUP BY road_category
+          ORDER BY COUNT(*) DESC
+          LIMIT 1 \
+          """
     df = run_query(engine, sql)
-    return df["road_name"].tolist()
-
-def get_period_bounds_query(resolution: str) -> str:
-    return f"""
-        SELECT
-          MIN(period) AS min_period,
-          MAX(period) AS max_period
-        FROM road_traffic_stats_{resolution}
-        WHERE road_name = :road_name
-    """
-
-def get_traffic_history_query(resolution: str) -> str:
-    return f"""
-        SELECT
-          period,
-          road_name,
-          average_speed,
-          average_travel_time
-        FROM road_traffic_stats_{resolution}
-        WHERE road_name = :road_name
-          AND period BETWEEN :start AND :end
-        ORDER BY period
-    """
+    return df.iloc[0, 0] if not df.empty else "Inconnu"

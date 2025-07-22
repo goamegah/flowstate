@@ -1,124 +1,99 @@
-# apps/ui/pages/3_Map.py
-
 import streamlit as st
 import pandas as pd
 import folium
-import ast
-from folium import Element
+import json
 from datetime import datetime
 from streamlit_folium import st_folium
 from streamlit_autorefresh import st_autorefresh
-
 from dataloader.data_loader import get_db_engine, run_query
 
 st.set_page_config(page_title="🗺️ Traffic Map", layout="wide")
-st.title("🗺️ Real-Time Traffic Map")
+st.title("🗺️ Carte du trafic en temps réel")
 
-# Rafraîchissement automatique toutes les 60 secondes
-st_autorefresh(interval=60 * 1000, key="map_refresh")
+# --- Rafraîchissement automatique toutes les 60 secondes
+st_autorefresh(interval=60 * 1000, key="refresh-map")
 
-engine = get_db_engine()
+# --- Initialisation filtre session_state ---
+if "selected_status_map" not in st.session_state:
+    st.session_state["selected_status_map"] = "Tous"
 
-@st.cache_data(ttl=30)
-def load_map_data() -> pd.DataFrame:
+# --- Chargement des données ---
+@st.cache_data(ttl=60)
+def load_latest_map_data():
     sql = """
-        SELECT
-          period,
-          location_id,
-          road_name,
-          road_category,
-          traffic_status,
-          geometry_linestring
-        FROM road_traffic_feats_map
-        WHERE geometry_linestring IS NOT NULL
-          AND period = (SELECT MAX(period) FROM road_traffic_feats_map)
-    """
+          SELECT *
+          FROM road_traffic_feats_map
+          WHERE timestamp = (SELECT MAX(timestamp) FROM road_traffic_feats_map) \
+          """
+    engine = get_db_engine()
     return run_query(engine, sql)
 
-df = load_map_data()
+df = load_latest_map_data()
+
 if df.empty:
-    st.warning("⚠️ Aucune donnée géographique disponible.")
+    st.warning("❌ Aucune donnée cartographique disponible.")
     st.stop()
 
-# Filtres
-with st.sidebar:
-    st.header("🔎 Filtres")
-    road_names       = sorted(df["road_name"].dropna().unique())
-    traffic_statuses = sorted(df["traffic_status"].dropna().unique())
+# --- Filtrage par statut ---
+status_options = sorted(df["trafficstatus"].dropna().unique())
+selected_status = st.selectbox(
+    "🎯 Filtrer par statut de trafic :",
+    options=["Tous"] + status_options,
+    index=(["Tous"] + status_options).index(st.session_state["selected_status_map"])
+)
+st.session_state["selected_status_map"] = selected_status
 
-    selected_road_names = st.multiselect("🛣️ Road(s)", road_names, default=road_names)
-    selected_statuses   = st.multiselect("🚦 Statut(s)", traffic_statuses, default=traffic_statuses)
+if selected_status != "Tous":
+    df = df[df["trafficstatus"] == selected_status]
 
-# Filtrage
-filtered_df = df[
-    df["road_name"].isin(selected_road_names) &
-    df["traffic_status"].isin(selected_statuses)
-]
+# --- Infos globales ---
+last_update = pd.to_datetime(df["timestamp"].max())
+nb_segments = len(df)
 
-# Résumé
-latest_period = df["period"].max()
-st.markdown(f"""
-### 🛰️ Mise à jour : `{latest_period.strftime('%Y-%m-%d %H:%M')}`  
-**🚗 Tronçons affichés :** {len(filtered_df)} / {len(df)}  
-""")
+st.markdown(f"🕒 **Dernière mise à jour :** `{last_update.strftime('%d/%m/%Y %H:%M:%S')}`")
+st.markdown(f"🧩 **Nombre de tronçons affichés :** `{nb_segments}`")
 
-# Couleurs par statut
-STATUS_COLORS = {
-    "freeFlow":   "green",
-    "slow":       "orange",
-    "heavy":      "red",
-    "trafficJam": "darkred",
-    "roadClosed": "black",
-    "unknown":    "gray",
+# --- Couleurs selon statut ---
+status_colors = {
+    "freeFlow": "green",
+    "heavy": "orange",
+    "congested": "red",
+    "unknown": "gray"
 }
-def get_color(status: str) -> str:
-    return STATUS_COLORS.get(status, "blue")
 
-# Création de la carte
-m = folium.Map(location=[48.1147, -1.6794], zoom_start=12, control_scale=True)
+# --- Création carte Folium ---
+traffic_map = folium.Map(location=[48.111, -1.68], zoom_start=13)
 
-for _, row in filtered_df.iterrows():
+for _, row in df.iterrows():
     try:
-        geom   = ast.literal_eval(row["geometry_linestring"])
-        coords = [(lat, lon) for lon, lat in geom["coordinates"]]
+        coords_raw = json.loads(row["coordinates"])
+        coords_latlon = [(lat, lon) for lon, lat in coords_raw]
+        color = status_colors.get(row["trafficstatus"], "gray")
+        tooltip = f"{row['denomination']} ({row['trafficstatus']}) – {row['averagevehiclespeed']} km/h"
         folium.PolyLine(
-            locations=coords,
-            color=get_color(row["traffic_status"]),
-            weight=5,
-            tooltip=f"{row['road_name']} ({row['traffic_status']})"
-        ).add_to(m)
+            locations=coords_latlon,
+            color=color,
+            weight=4,
+            opacity=0.8,
+            tooltip=tooltip
+        ).add_to(traffic_map)
     except Exception as e:
-        st.error(f"Erreur sur location_id={row['location_id']}: {e}")
+        st.error(f"Erreur avec le segment {row['segment_id']}: {e}")
 
-# Légende avec cercles Unicode
-legend_html = """
-<div style="
-    position: fixed;
-    bottom: 50px;
-    left: 50px;
-    width: 160px;
-    background-color: white;
-    border:2px solid gray;
-    border-radius:5px;
-    padding: 10px;
-    font-size:14px;
-    z-index:1000;
-">
-  <b>🚦 Légende</b><br>
-  <span style="font-size:16px; color:green;">&#9679;</span> Free Flow<br>
-  <span style="font-size:16px; color:orange;">&#9679;</span> Slow<br>
-  <span style="font-size:16px; color:red;">&#9679;</span> Heavy<br>
-  <span style="font-size:16px; color:darkred;">&#9679;</span> Traffic Jam<br>
-  <span style="font-size:16px; color:black;">&#9679;</span> Road Closed<br>
-  <span style="font-size:16px; color:gray;">&#9679;</span> Unknown
-</div>
-"""
-m.get_root().html.add_child(Element(legend_html))
+# --- Légende intuitive ---
+with st.expander("🗺️ Légende des statuts", expanded=True):
+    st.markdown("""
+    <ul style="list-style: none;">
+        <li>🟩 <b>freeFlow</b> : Circulation fluide</li>
+        <li>🟧 <b>heavy</b> : Circulation dense</li>
+        <li>🟥 <b>congested</b> : Embouteillage</li>
+        <li>⬜ <b>unknown</b> : Statut inconnu</li>
+    </ul>
+    """, unsafe_allow_html=True)
 
-# Affichage
-st.markdown("## 🧭 Carte des tronçons surveillés")
-st_folium(m, width=1000, height=600)
+# --- Affichage carte ---
+st_folium(traffic_map, width="100%", height=600)
 
-# Données tabulaires
-with st.expander("🔍 Voir les données géographiques"):
-    st.dataframe(filtered_df)
+# --- Données brutes ---
+with st.expander("📄 Voir les données brutes"):
+    st.dataframe(df.reset_index(drop=True))

@@ -1,7 +1,9 @@
+# docker-compose.yaml
+
 x-airflow-common:
   &airflow-common
     # In order to add custom dependencies or upgrade provider packages you can use your extended image.
-    # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
+    # Comment the image line, place your Dockerfile.txt in the directory where you placed the docker-compose.yaml
     # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
     #image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.5.1}
     # build:
@@ -21,15 +23,22 @@ x-airflow-common:
         AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
         AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
         _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
+        TZ: Europe/Paris
     env_file:
         - .env
     volumes:
         - ${AIRFLOW_PROJ_DIR:-.}/airflow/dags:/opt/airflow/dags
         - ${AIRFLOW_PROJ_DIR:-.}/airflow/logs:/opt/airflow/logs
         - ${AIRFLOW_PROJ_DIR:-.}/airflow/plugins:/opt/airflow/plugins
-        # - ${AIRFLOW_PROJ_DIR:-.}/airflow/data:/opt/airflow/data
-        # on monte le volume nommé "airflow-data" ici aussi
-        - airflow-data:/opt/airflow/data
+        # Volume Docker nommé pour les JARs (persiste après arrêt des conteneurs)
+        - host-shared-jars:/opt/airflow/jars
+        # Volume partagé pour les données
+        - host-shared-data:/opt/airflow/data
+        - host-shared-ckpt:/opt/airflow/checkpoint
+        # - host-shared-data:/opt/airflow/jars
+        # - ./target/scala-2.13/flowstate-assembly.jar:/opt/airflow/jars/app.jar:ro
+        - ${PWD}/database:/opt/airflow/database:ro
+
     user: "${AIRFLOW_UID:-1000}:0"
     depends_on:
       &airflow-common-depends-on
@@ -37,8 +46,29 @@ x-airflow-common:
             condition: service_healthy
         postgres:
             condition: service_healthy
+        spark-init:
+            condition: service_completed_successfully # Ensure Spark is initialized before Airflow starts
+    networks:
+        - db-network
 
 services:
+    # ----------------------------------------------------------------
+    # Spark Init - Compilation et mise à disposition du JAR pour Airflow
+    # Ce service compile le JAR Scala et le met à disposition d'Airflow
+    # Il se termine après compilation - Airflow prend le relais pour l'orchestration
+    # ----------------------------------------------------------------
+    spark-init:
+        build:
+            context: .           # Racine du projet (où sont src/, build.sbt, Dockerfile.txt)
+            dockerfile: Dockerfile
+        container_name: "spark_init_builder"
+        volumes:
+            - host-shared-data:/opt/airflow/data
+            - host-shared-jars:/opt/airflow/jars
+        environment:
+            - SBT_OPTS=-Xmx4G -XX:+UseG1GC
+        networks:
+            - db-network
     postgres:
         image: postgres:13
         environment:
@@ -52,6 +82,8 @@ services:
             interval: 5s
             retries: 5
         restart: always
+        networks:
+            - db-network
 
     redis:
         image: redis:latest
@@ -63,6 +95,8 @@ services:
             timeout: 30s
             retries: 50
         restart: always
+        networks:
+            - db-network
 
     airflow-webserver:
         <<: *airflow-common
@@ -192,8 +226,8 @@ services:
                   echo "   https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html#before-you-begin"
                   echo
                 fi
-                mkdir -p /sources/logs /sources/dags /sources/plugins /sources/data
-                chown -R "${AIRFLOW_UID}:0" /sources/{logs,dags,plugins,data}
+                mkdir -p /sources/logs /sources/dags /sources/plugins /sources/data /sources/jars /sources/checkpoint
+                chown -R "${AIRFLOW_UID}:0" /sources/{logs,dags,plugins,data,jars,checkpoint}
                 exec /entrypoint airflow version
         # yamllint enable rule:line-length
         environment:
@@ -244,27 +278,27 @@ services:
     # ----------------------------------------------------------------
     # Spark App (lecteur du dossier raw)
     # ----------------------------------------------------------------
-    spark-app:
-        build:
-            context: ./app
-        container_name: spark_app
-        user: root
-        env_file:
-            - .env
-        environment:
-            - SPARK_MASTER=local[*]
-            - HADOOP_USER_NAME=root
-        volumes:
-            # monte le dossier airflow/data (qui contient maintenant raw/) en lecture-écriture
-            # - ./airflow/data:/opt/airflow/data:rw
-            # monte vos scripts DDL
-            - airflow-data:/opt/airflow/data:rw
-            - ./database:/opt/database:ro
-        depends_on:
-            dwh-postgres-db:
-                condition: service_healthy
-        networks:
-            - db-network
+    #    spark-app:
+    #        build:
+    #            context: .
+    #        container_name: spark_app
+    #        user: root
+    #        env_file:
+    #            - .env
+    #        environment:
+    #            - SPARK_MASTER=local[*]
+    #            - HADOOP_USER_NAME=root
+    #        volumes:
+    #            # monte le dossier airflow/data (qui contient maintenant raw/) en lecture-écriture
+    #            # - ./airflow/data:/opt/airflow/data:rw
+    #            # monte vos scripts DDL
+    #            - host-shared-data:/opt/airflow/data:rw
+    #            - ./database:/opt/database:ro
+    #        depends_on:
+    #            dwh-postgres-db:
+    #                condition: service_healthy
+    #        networks:
+    #            - db-network
 
     # ----------------------------------------------------------------
     # Streamlit
@@ -272,7 +306,7 @@ services:
     streamlit:
         build:
             context: ./ui
-        container_name: streamlit_ui
+        container_name: "ui_streamlit"
         env_file:
             - .env
         environment:
@@ -287,19 +321,23 @@ services:
             - dwh-postgres-db
         networks:
             - web-network
+        volumes:
+            - ./ui:/app
 
     # ----------------------------------------------------------------
     # Postgres DWH
     # ----------------------------------------------------------------
     dwh-postgres-db:
         image: postgres:13
-        container_name: "dwh_postgres"
+        container_name: "dwh_postgres_db"
         environment:
             POSTGRES_USER: ${DWH_POSTGRES_USR}
             POSTGRES_PASSWORD: ${DWH_POSTGRES_PWD}
             POSTGRES_DB: ${DWH_POSTGRES_DB}
+            TZ: Europe/Paris
+            PGTZ: Europe/Paris
         healthcheck:
-            test: [ "CMD-SHELL", "pg_isready -U dwh_postgres_user -d dwh-postgres-db" ]
+            test: [ "CMD-SHELL", "pg_isready -U dwh_postgres_user" ] # -d dwh_postgres_db
             interval: 5s
             retries: 5
         ports:
@@ -316,15 +354,27 @@ services:
 volumes:
     postgres-volume:
     dwh-postgres-volume:
-    airflow-data:
+    host-shared-data:
         driver: local
         driver_opts:
             type: none
-            device: ${PWD}/airflow/data
+            device: ${PWD}/shared/data
+            o: bind
+    # Volume Docker nommé pour les JARs (persiste après l'arrêt des conteneurs)
+    host-shared-jars:
+        driver: local
+        driver_opts:
+            type: none
+            device: ${PWD}/shared/jars
+            o: bind
+    host-shared-ckpt:
+        driver: local
+        driver_opts:
+            type: none
+            device: ${PWD}/shared/checkpoint
             o: bind
 networks:
     web-network:
         driver: bridge
     db-network:
         driver: bridge
-

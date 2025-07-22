@@ -13,7 +13,7 @@ AWS_REGION="eu-west-1"
 # (vos autres variables S3 / Kinesis si utilisées)
 
 # -----------------------------------------------------------------------------
-# Airflow metadata DB (ftk_afw_postgres_db)
+# Airflow metadata DB (postgres_db)
 # -----------------------------------------------------------------------------
 # Ces variables sont reprises par votre bloc `x-airflow-common-env`
 POSTGRES_USER="airflow"
@@ -27,7 +27,7 @@ POSTGRES_PORT="5432"
 # -----------------------------------------------------------------------------
 # Typesafe Config lira ces variables si vous les nommez comme ci-dessous :
 DWH_POSTGRES_HOST="dwh-postgres-db"
-DWH_POSTGRES_PORT="5433"
+DWH_POSTGRES_PORT="5432"
 DWH_POSTGRES_DB="dwh_postgres_db"
 DWH_POSTGRES_USR="dwh_postgres_user"
 DWH_POSTGRES_PWD="dwh_postgres_password"
