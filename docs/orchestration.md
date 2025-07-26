@@ -1,9 +1,13 @@
 # Orchestration
+<h3 align="center">
+    <a href="https://airflow.apache.org/"><img style="float: middle; padding: 10px 10px 10px 10px;" width="220" height="100" src="../assets/airflow.png" /></a>
+</h3>
+
 Orchestration in the FlowState project is managed through **Apache Airflow**, which is used to schedule and monitor the various data processing tasks. Airflow allows for the creation of Directed Acyclic Graphs (DAGs) to define the workflow, making it easy to manage dependencies and ensure that tasks are executed in the correct order.
 ## Airflow DAG
 The Airflow DAG for the FlowState project is defined in the `airflow/dags` directory. The DAG is responsible for orchestrating the data ingestion, transformation, and storage processes. It includes tasks for:
 - Fetching data from the Rennes Metropole API to raw data storage.
-- Running Spark Structured Streaming jobs to process the raw data.
+- Running Spark Structured Streaming Main job to process the raw data.
 - Cleaning folders like `raw`, `transient`, and `checkpoint`.
 
 ### Load Raw File 
