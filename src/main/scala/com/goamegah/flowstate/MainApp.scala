@@ -6,22 +6,22 @@ import com.goamegah.flowstate.streaming.TrafficStreamProcessor
 object MainApp {
     def main(args: Array[String]): Unit = {
 
-        // Initialisation du schéma PostgreSQL
+        // Initialize the PostgreSQL schema
         DBSchemaManager.init()
 
-        // Démarrage du streaming
+        // Start streaming
         TrafficStreamProcessor.start()
 
-        // Arrêt du streaming après 5 minutes
+        // Stop streaming after 5 minutes
         // Thread.sleep(5 * 60 * 1000) // 5 minutes
 
-        // Arrêt du streaming
+        // Stop streaming
         // TrafficStreamProcessor.stop()
 
-        // Nettoyage du schéma PostgreSQL
+        // Clean up the PostgreSQL schema
         // DBSchemaManager.cleanup()
 
-        // Arrêt de l'application
+        // Stop the application
         // spark.stop()
 
     }

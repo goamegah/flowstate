@@ -8,14 +8,14 @@ object PostgresLoader {
 
     private val logger = LoggerFactory.getLogger(getClass)
 
-    /** Charge un DataFrame dans une table PostgreSQL
+    /** Loads a DataFrame into a PostgreSQL table
      *
-     * @param df        Le DataFrame à charger
-     * @param tableName Nom de la table cible
-     * @param mode      Mode de sauvegarde : "append", "overwrite", etc.
+     * @param df        The DataFrame to load
+     * @param tableName Target table name
+     * @param mode      Save mode: "append", "overwrite", etc.
      */
     def load(df: DataFrame, tableName: String, mode: SaveMode = SaveMode.Append)(implicit spark: SparkSession): Unit = {
-        // Forcer le chargement du driver PostgreSQL
+        // Force loading of the PostgreSQL driver
         Class.forName("org.postgresql.Driver")
 
         val jdbcUrl = AppConfig.Postgres.jdbcUrl
@@ -25,48 +25,48 @@ object PostgresLoader {
         properties.setProperty("driver", "org.postgresql.Driver")
 
         if (df.isEmpty) {
-            logger.warn(s"/!\\ Aucun enregistrement à insérer dans '$tableName'")
+            logger.warn(s"/!\\ No records to insert into '$tableName'")
             return
         }
 
         try {
-            logger.info(s"[ OK ] Insertion dans '$tableName' en mode $mode...")
+            logger.info(s"[ OK ] Inserting into '$tableName' with mode $mode...")
 
             df.write
               .mode(mode)
               .jdbc(jdbcUrl, tableName, properties)
 
-            logger.info(s"[ OK ] Insertion réussie dans '$tableName' (${df.count()} lignes)")
+            logger.info(s"[ OK ] Successfully inserted into '$tableName' (${df.count()} rows)")
 
         } catch {
             case e: Exception =>
-                logger.error(s"/!\\ Erreur lors de l'insertion dans '$tableName' : ${e.getMessage}", e)
+                logger.error(s"/!\\ Error inserting into '$tableName': ${e.getMessage}", e)
         }
     }
 
-    /** Charge un DataFrame dans une table PostgreSQL en écrasant les données existantes
+    /** Loads a DataFrame into a PostgreSQL table, overwriting existing data
      *
-     * @param df        Le DataFrame à charger
-     * @param tableName Nom de la table cible
+     * @param df        The DataFrame to load
+     * @param tableName Target table name
      */
     def overwriteLoad(df: DataFrame, tableName: String)(implicit spark: SparkSession): Unit = {
         val jdbcUrl = AppConfig.Postgres.jdbcUrl
-        // Forcer le chargement du driver PostgreSQL
+        // Force loading of the PostgreSQL driver
         Class.forName("org.postgresql.Driver")
         val conn = java.sql.DriverManager.getConnection(jdbcUrl, AppConfig.Postgres.user, AppConfig.Postgres.password)
 
         try {
             val stmt = conn.createStatement()
             stmt.execute(s"TRUNCATE TABLE $tableName")
-            logger.info(s"[OK] Table '$tableName' vidée avec succès (TRUNCATE)")
+            logger.info(s"[OK] Table '$tableName' successfully truncated (TRUNCATE)")
         } catch {
             case e: Exception =>
-                logger.error(s"/!\\ Erreur lors du TRUNCATE de '$tableName' : ${e.getMessage}")
+                logger.error(s"/!\\ Error truncating '$tableName': ${e.getMessage}")
         } finally {
             conn.close()
         }
 
-        // Puis append
+        // Then append
         load(df, tableName, SaveMode.Append)
     }
 

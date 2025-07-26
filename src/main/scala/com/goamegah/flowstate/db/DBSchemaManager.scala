@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 object DBSchemaManager {
     private val logger = LoggerFactory.getLogger(this.getClass)
 
-    // Forcer le chargement du driver PostgreSQL
+    // Force loading of the PostgreSQL driver
     Class.forName("org.postgresql.Driver")
 
     private def getConnection(): Connection = {
@@ -22,15 +22,16 @@ object DBSchemaManager {
     }
 
     /**
-     * Exécute un fichier SQL sur la base de données PostgreSQL.
-     *
-     * @param path Le chemin du fichier SQL à exécuter.
-     * @param conn La connexion à la base de données.
+     * Execute a SQL file to create tables or views in PostgreSQL.
+     * @param path Path to the SQL file.
+     *             The file should contain valid SQL statements.
+     *             If the file does not exist, a warning is logged and the method returns without executing anything.
+     *             If an error occurs during execution, a warning is logged.
      */
     private def executeSqlFile(path: String)(implicit conn: Connection): Unit = {
         val file = new File(path)
         if (!file.exists()) {
-            logger.warn(s"/!\\ Le fichier $path n’existe pas. Ignoré.")
+            logger.warn(s"/!\\ File $path does not exist. Ignored.")
             return
         }
 
@@ -38,15 +39,15 @@ object DBSchemaManager {
         try {
             val stmt = conn.createStatement()
             stmt.execute(sql)
-            logger.info(s"[OK] Script exécuté avec succès : ${file.getName}")
+            logger.info(s"[OK] Script executed successfully: ${file.getName}")
         } catch {
             case ex: Exception =>
-                logger.warn(s"/!\\ Erreur lors de l'exécution du script ${file.getName} : ${ex.getMessage}")
+                logger.warn(s"/!\\ Error while executing script ${file.getName}: ${ex.getMessage}")
         }
     }
 
     def init(): Unit = {
-        logger.info("[...] Initialisation du schéma PostgreSQL")
+        logger.info("[...] Initializing PostgreSQL schema")
 
         implicit val conn: Connection = getConnection()
 
@@ -66,13 +67,13 @@ object DBSchemaManager {
                 executeSqlFile(s"$ddlDir/tables/$file")
             }
 
-            // Vues
+            // Views
             val viewDir = new File(s"$ddlDir/views")
             if (viewDir.exists && viewDir.isDirectory) {
                 val viewFiles = viewDir.listFiles().filter(_.getName.endsWith(".sql")).sorted
                 viewFiles.foreach(view => executeSqlFile(view.getPath))
             } else {
-                logger.warn(s"/!\\ Dossier 'views/' introuvable dans $ddlDir")
+                logger.warn(s"/!\\ Folder 'views/' not found in $ddlDir")
             }
 
         } finally {
@@ -81,14 +82,14 @@ object DBSchemaManager {
     }
 
     /**
-     * Supprime toutes les tables et vues du schéma PostgreSQL.
+     * Deletes all tables and views from the PostgreSQL schema.
      */
     def cleanup(): Unit = {
-        logger.info("[...] Nettoyage du schéma PostgreSQL")
+        logger.info("[...] Cleaning up PostgreSQL schema")
         implicit val conn: Connection = getConnection()
         try {
             executeSqlFile(s"${AppConfig.Postgres.ddlDir}/cleanup/drop_all.sql")
-            logger.info("[ OK ] Schéma PostgreSQL nettoyé.")
+            logger.info("[ OK ] PostgreSQL schema cleaned up.")
         } finally {
             conn.close()
         }

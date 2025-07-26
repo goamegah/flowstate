@@ -13,21 +13,21 @@ object TransientToRaw {
 
         if (!rawDir.exists()) rawDir.mkdirs()
 
-        println(s"[INFO] Déplacement des fichiers de ${transientDir.getAbsolutePath} vers ${rawDir.getAbsolutePath}")
+        println(s"[INFO] Moving files from ${transientDir.getAbsolutePath} to ${rawDir.getAbsolutePath}")
 
         val subDirs = Option(transientDir.listFiles())
             .getOrElse(Array.empty)
             .filter(_.isDirectory)
 
         subDirs.foreach { dir =>
-            // Rechercher uniquement les fichiers JSON principaux (ignore les .crc, _SUCCESS, etc.)
+            // Only look for main JSON files (ignore .crc, _SUCCESS, etc.)
             val jsonParts = Option(dir.listFiles())
                 .getOrElse(Array.empty)
                 .filter(f => f.getName.endsWith(".json") && !f.getName.startsWith("."))
 
             jsonParts.foreach { file =>
-                // Nom du fichier destination = nom du dossier + .json (pas .json.json)
-                val baseName = dir.getName.stripSuffix(".json") // si jamais déjà suffixé
+                // Destination file name = folder name + .json (not .json.json)
+                val baseName = dir.getName.stripSuffix(".json") // in case already suffixed
                 val newFileName = s"$baseName.json"
                 val destPath = Paths.get(rawDir.getAbsolutePath, newFileName)
 
@@ -35,13 +35,13 @@ object TransientToRaw {
                     Files.move(file.toPath, destPath, StandardCopyOption.REPLACE_EXISTING)
                 } match {
                     case Success(_) =>
-                        println(s"[OK] Déplacé : ${file.getName} → ${destPath.getFileName}")
+                        println(s"[OK] Moved: ${file.getName} → ${destPath.getFileName}")
                     case Failure(e) =>
-                        println(s"[ERREUR] Échec du déplacement de ${file.getName} : ${e.getMessage}")
+                        println(s"[ERROR] Failed to move ${file.getName}: ${e.getMessage}")
                 }
             }
 
-            // Nettoyage du dossier une fois tous les fichiers déplacés
+            // Clean up the folder after all files have been moved
             val deleted = Try {
                 Option(dir.listFiles()).foreach(_.foreach(_.delete()))
                 dir.delete()
@@ -49,12 +49,12 @@ object TransientToRaw {
 
             deleted match {
                 case Success(_) =>
-                    println(s"[CLEANUP] Dossier supprimé : ${dir.getAbsolutePath}")
+                    println(s"[CLEANUP] Folder deleted: ${dir.getAbsolutePath}")
                 case Failure(e) =>
-                    println(s"[WARN] Impossible de supprimer ${dir.getName} : ${e.getMessage}")
+                    println(s"[WARN] Unable to delete ${dir.getName}: ${e.getMessage}")
             }
         }
 
-        println("[INFO] Traitement terminé.")
+        println("[INFO] Processing complete.")
     }
 }

@@ -20,7 +20,9 @@ object AppConfig {
 
     private val where = "container"
 
-    // Fonction utilitaire pour récupérer les configurations avec fallback
+    // Utility function to get a string with a fallback
+    // This will print a warning if the configuration is not found
+    // and return a default value
     private def getStringWithFallback(path: String, fallback: String): String = {
         Try(config.getString(path)).getOrElse {
             println(s"Configuration not found for $path, using fallback: $fallback")

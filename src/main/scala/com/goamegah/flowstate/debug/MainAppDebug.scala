@@ -22,10 +22,10 @@ object MainAppDebug {
             .withColumn("timestamp", org.apache.spark.sql.functions.to_timestamp($"datetime"))
             .withColumn("period", org.apache.spark.sql.functions.window($"timestamp", "1 minute").getField("start"))
 
-        println("=== ✅ Schéma lu ===")
+        println("=== Schema read ===")
         transformed.printSchema()
 
-        println("=== 🔍 Échantillon de données ===")
+        println("=== Sample data ===")
         transformed.show(10, truncate = false)
 
         spark.stop()

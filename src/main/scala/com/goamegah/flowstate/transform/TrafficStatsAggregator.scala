@@ -6,8 +6,8 @@ import org.apache.spark.sql.{DataFrame}
 object TrafficStatsAggregator {
 
     /**
-     * Agrégation glissante avec fenêtre de 30 minutes (actualisée toutes les 10 min),
-     * utilisée pour l’évolution dynamique (métriques en temps réel).
+     * Sliding aggregation with a 30-minute window (updated every 10 minutes),
+     * used for dynamic evolution (real-time metrics).
      */
     def aggregateBySlidingWindow(df: DataFrame): DataFrame = {
         df
@@ -23,14 +23,14 @@ object TrafficStatsAggregator {
     }
 
     /**
-     * Agrégation par période (minute ou heure) et par segment routier + statut.
-     * Permet d'afficher l’évolution du trafic sur chaque route.
+     * Aggregation by period (minute or hour) and by road segment + status.
+     * Allows displaying the evolution of traffic on each road.
      */
     def aggregateByPeriodAndRoadName(df: DataFrame, resolution: String): DataFrame = {
         val windowDuration = resolution match {
             case "minute" => "1 minute"
             case "hour"   => "1 hour"
-            case _        => throw new IllegalArgumentException("Résolution inconnue")
+            case _        => throw new IllegalArgumentException("Unknown resolution")
         }
 
         val latencySeconds = unix_timestamp(current_timestamp()) - unix_timestamp(col("timestamp"))
@@ -55,11 +55,9 @@ object TrafficStatsAggregator {
             )
     }
 
-
-
     /**
-     * Agrégation simple : vitesse moyenne par statut (bouché, fluide, etc.)
-     * Pour afficher les vitesses moyennes par catégorie de trafic.
+     * Simple aggregation: average speed by status (congested, fluid, etc.)
+     * To display average speeds by traffic category.
      */
     def avgSpeedByStatus(df: DataFrame): DataFrame = {
         df.groupBy("trafficstatus")
