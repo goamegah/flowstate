@@ -42,8 +42,6 @@ In the picture below, you can see each module and its purpose:
 ![alt text](../assets/project_structure.png)
 
 
-[Index](./index.md) <- -> [Configuration](configuration.md)
-
 
 ## Key Components
 - **src/main/resources**: Contains configuration files and properties for the application.
@@ -56,3 +54,6 @@ In the picture below, you can see each module and its purpose:
   - **load**: Contains classes for loading data into the data warehouse.
   - **streaming**: Contains classes for processing streaming data.
   - **transform**: Contains classes for transforming traffic data into meaningful features.
+
+
+[Index](./index.md) <- -> [Configuration](configuration.md)

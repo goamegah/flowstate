@@ -9,4 +9,4 @@ The configuration of the FlowState project is managed through a YAML file, which
 
 
 
-<- [Index](index.md)
+[Index](structure.md) <- -> [Configuration](ingestion.md)

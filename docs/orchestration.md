@@ -23,3 +23,5 @@ This DAG is defined in the `airflow/dags/pl_run_flowstate_mainapp.py` file. It i
 ### Clean Folders
 This DAG is defined in the `airflow/dags/pl_clean_folders.py` file. It is responsible for cleaning up the raw, transient, and checkpoint folders.
 ![Airflow DAG Example](../assets/pl_clean_up.jpeg)
+
+<- [Visualization](visualization.md)
