@@ -8,7 +8,7 @@ Data is collected from the [Rennes Metropole API](https://data.rennesmetropole.f
 Here's reference architecture of the project:
 ![Reference Architecture](./assets/arch.png)
 
-Check out the [project structure](docs/structure.md) for more details on how the components are organized.
+For more details, see the [Documentation](docs/index.md).
 
 
 ## Table of Contents
