@@ -15,15 +15,15 @@ default_args = {
 with DAG(
         dag_id='pl_run_flowstate_mainapp_dag',
         default_args=default_args,
-        description='Démarrage du job MainApp Scala Spark Streaming',
-        schedule_interval=None,  # lancement manuel recommandé
+        description='Start the MainApp Scala Spark Streaming job',
+        schedule_interval=None,  # manual trigger recommended
         catchup=False
 ) as dag:
 
     run_streaming_job = BashOperator(
         task_id='launch_mainapp_streaming',
         bash_command="""
-        echo "=== Lancement du streaming Spark ==="
+        echo "=== Starting Spark streaming ==="
         spark-submit \
             --class com.goamegah.flowstate.MainApp \
             --master local[*] \

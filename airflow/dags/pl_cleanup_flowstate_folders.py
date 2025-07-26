@@ -15,24 +15,24 @@ default_args = {
 with DAG(
         dag_id='pl_cleanup_flowstate_folders_dag',
         default_args=default_args,
-        description='Nettoyage des répertoires de données FlowState',
-        schedule_interval=None,  # Ou mets None pour le lancer manuellement
+        description='Cleanup of FlowState data directories',
+        schedule_interval=None,  # Or set to None to trigger manually
         catchup=False
 ) as dag:
 
-    # Suppression des fichiers RAW
+    # Delete RAW files
     clean_raw = BashOperator(
         task_id='clean_raw_dir',
         bash_command='rm -rf /opt/airflow/data/raw/*'
     )
 
-    # Suppression des fichiers TRANSIENT
+    # Delete TRANSIENT files
     clean_transient = BashOperator(
         task_id='clean_transient_dir',
         bash_command='rm -rf /opt/airflow/data/transient/*'
     )
 
-    # Suppression des checkpoints Spark
+    # Delete Spark checkpoints
     clean_checkpoints = BashOperator(
         task_id='clean_spark_checkpoints',
         bash_command='rm -rf /opt/airflow/checkpoint/*'
