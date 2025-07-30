@@ -19,4 +19,4 @@ Once the data is collected, it is moved to a raw data folder as JSON files. This
 
 
 
-[Index](./configuration.md) <- -> [Configuration](transformation.md)
+[Configuration](configuration.md) <- -> [Transformation](transformation.md)
