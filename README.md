@@ -1,4 +1,4 @@
-<h1 align="center">End-To-End Near Real-time Road Traffic Monitoring Solution</h1>
+<h1 align="center">Near Real-time Road Traffic Monitoring Solution</h1>
 
 FlowState is a near real-time road traffic monitoring solution that leverages Apache Spark, Apache Airflow, and Docker to process and analyze traffic data. The project is designed to handle large volumes of data efficiently, providing insights into traffic patterns and conditions.
 This solution is built to be scalable and robust, making it suitable for real-world applications in traffic management and urban planning.
