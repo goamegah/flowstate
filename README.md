@@ -5,10 +5,10 @@ This solution is built to be scalable and robust, making it suitable for real-wo
 
 Data is collected from the [Rennes Metropole API](https://data.rennesmetropole.fr/explore/dataset/etat-du-trafic-en-temps-reel/information/), which provides real-time traffic data. The solution processes this data to extract meaningful insights, such as traffic flow and congestion levels, and stores the results in a structured format for further analysis.
 
+For more details, see the [Documentation](docs/index.md).
+
 Here's reference architecture of the project:
 ![Reference Architecture](./assets/arch.png)
-
-For more details, see the [Documentation](docs/index.md).
 
 
 ## Table of Contents
